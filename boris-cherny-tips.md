@@ -64,6 +64,9 @@
 
 - **PostToolUse**：最實用的 hook，在 Claude 每次編輯文件後自動執行格式化工具（如 prettier、swiftformat），避免 CI 失敗。
 - **SessionStart**：自動載入最近的 commits 和 sprint context，讓每個 session 都有完整背景。
+- **PreToolUse**：記錄所有 bash 指令，方便稽核與除錯。
+- **PermissionRequest**：將權限確認請求路由到 WhatsApp 或 Slack，讓你遠端批准高風險操作。
+- **PostCompact**：在 Claude 壓縮 context window 之後觸發，可用於重新注入關鍵指令，避免重要資訊在壓縮後遺失。
 - 進階用法：透過 hook 將敏感的權限檢查路由到更強的模型（如用於安全掃描）。
 
 ---
@@ -107,8 +110,34 @@
 
 ## 排程與長時間任務
 
-- `/loop`：在本地執行週期性任務，最長可達三天。
+- `/loop`：在本地執行週期性任務，最長可達三天。Boris 實際運行的排程範例：每 5 分鐘處理一次 code review、每 30 分鐘推送 Slack 反饋、每小時清理過期 PR。
 - `/schedule`：設定在機器關閉後仍能持續執行的雲端工作。
+
+---
+
+## 隱藏與進階功能（2026 年 3 月分享）
+
+- **行動裝置 App**：Claude Code 有 iOS / Android 應用程式，可直接在手機上審查 PR、撰寫程式碼，不需要開電腦。
+- **跨裝置 Session 傳送**：
+  - `--teleport`：將雲端 session 傳送至本地終端機繼續執行。
+  - `/remote-control`（或 `claude remote-control`）：從手機或網頁控制本地執行中的 session。Boris 在設定中對所有 session 預設啟用 remote-control。
+- **Cowork Dispatch**：Claude Desktop App 的安全遠端控制，可透過 MCP 和瀏覽器處理郵件、管理檔案等非編碼任務，Boris 每天用它遠端處理 Slack 和電子郵件。
+- **Chrome 擴充功能**：讓 Claude 直接在瀏覽器中驗證前端輸出，可迭代修正網頁外觀與功能。
+- **Desktop App 內建 Web Server**：Desktop 版本會自動啟動 web server，並用內建瀏覽器進行測試，簡化前端開發流程。
+- **Session 分支（/branch）**：使用 `/branch` 建立對話分支，或用 `claude --resume <session-id> --fork-session` 從 CLI 複製已有 session，方便嘗試不同方向。
+- **/btw**：在 Claude 執行任務的過程中插入一個快速的旁側問題，不中斷主任務、不污染對話歷史，答案以浮層顯示。
+- **/batch**：將大規模程式碼遷移分散到數百甚至數千個 worktree agent 上並行執行，適合跨整個 codebase 的大量變更。
+- **`--bare` 旗標**：跳過自動載入本地設定，讓 SDK 啟動速度提升最多 10 倍；當你明確指定 system prompt 和 MCP 時使用。
+- **`--add-dir`**：授予 Claude 存取主工作目錄以外額外 repository 的權限，適合跨多個 repo 的任務。
+- **自訂 Agent（`--agent`）**：在 `.claude/agents/` 定義具有受限工具集和自訂 system prompt 的專用 agent，例如唯讀審查 agent 或領域特定 agent。
+
+---
+
+## 努力程度控制（Effort Levels）
+
+- 預設努力程度已調整為 **xhigh**（介於 high 和 max 之間的新等級），在推理深度與延遲之間取得平衡。
+- `/effort max`：讓 Claude 進行更長時間的推理，用盡所需 token，適合複雜的除錯、架構決策或需要深度思考的棘手問題。
+- 可透過 effort 設定、task budgets 或要求 Claude 簡潔回答來管理 token 使用量。
 
 ---
 
