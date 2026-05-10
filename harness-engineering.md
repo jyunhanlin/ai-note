@@ -75,7 +75,14 @@ Agent = Loop(LLM + Context + Tools)
 
 ### 詞源與致謝
 
-「Harness Engineering」一詞由 **Vaibhav Trivedy(@Vtrivedy10)** 命名;**HumanLayer(@dexhorthy)** 提出「failures are configuration problems, not model problems」框架;**Anthropic** 的 context engineering 研究與 Claude Code 文件提供了大量底層思路;**Addy Osmani** 將上述思路整合成完整論述(《Agent Harness Engineering》, 2026-05-10)。本筆記在這些基礎上,結合中文社群討論與 Claude Code 實作經驗綜合整理。
+「Harness Engineering」一詞的定形源於以下幾位的工作:
+
+- **Vaibhav Trivedy**(@Vtrivedy10)— 命名與核心定義
+- **HumanLayer / @dexhorthy** — 提出「failures are configuration problems, not model problems」reframe
+- **Anthropic** — context engineering 研究與 Claude Code 官方文件,提供大量底層思路
+- **Addy Osmani** — 將上述思路整合成完整論述(《Agent Harness Engineering》,2026-05-10)
+
+本筆記在這些基礎上,結合中文社群討論與 Claude Code 實作經驗綜合整理。
 
 ### 定義
 
@@ -116,7 +123,7 @@ Agent = Loop(LLM + Context + Tools)
 
 每個 harness 元件都該能說出它服務的具體行為。**講不出職責的元件,就應該被刪掉**。這條原則同時也是熵管理的篩選器(見 §四 面向 6)。詳見 §三 心法 2。
 
-### 不是什麼
+### 與相鄰概念的差異
 
 值得釐清三組常被混淆的概念:
 
