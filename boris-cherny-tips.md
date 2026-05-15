@@ -101,12 +101,14 @@
 ### 排程與長時間任務
 - `/loop`：在本地執行週期性任務，最長可達三天。Boris 實際運行的排程範例：每 5 分鐘處理一次 code review、每 30 分鐘推送 Slack 反饋、每小時清理過期 PR。
 - `/schedule`：設定在機器關閉後仍能持續執行的雲端工作。
+- **`/goal`**（2026 年 5 月新增）：為任務設定目標條件，讓 Claude 自動執行直到達成。底層機制等同於 `/loop until <條件>`——有人在 Threads 問 Boris 能否新增 `/goal` 功能，他回覆「用 `/loop until` 就行了」，隨後 Claude Code 2.1.139 於 18 小時內正式推出 `/goal` 指令。（[來源](https://www.threads.com/@aabyzov/post/DYOc5I1CDvH/may-boris-cherny-at-anthropic-gets-asked-about-goal-for-claude-code-replies)）
 
 ### 跨裝置與遠端控制（2026 年 3 月分享）
 - **行動裝置 App**：Claude Code 有 iOS / Android 應用程式，可直接在手機上審查 PR、撰寫程式碼，不需要開電腦。
 - **`--teleport`**：將雲端 session 傳送至本地終端機繼續執行。
 - **`/remote-control`**（或 `claude remote-control`）：從手機或網頁控制本地執行中的 session。Boris 在設定中對所有 session 預設啟用 remote-control。
 - **Cowork Dispatch**：Claude Desktop App 的安全遠端控制，可透過 MCP 和瀏覽器處理郵件、管理檔案等非編碼任務，Boris 每天用它遠端處理 Slack 和電子郵件。
+- **Cowork + Opus 4.7 自動完成現實世界任務**（2026 年 5 月分享）：將個人偏好（如航班艙等、飯店需求）寫進 Cowork instructions，讓 Opus 4.7 自動開啟瀏覽器、瀏覽多個網站並完成預訂。Boris 分享：過去 Cowork 訂機票表現平平，但搭配 Opus 4.7 後首次成功一次性完成——在他繼續用 Claude Code 工作的同時，Cowork 幫他訂了 8 趟班機和 5 間飯店。（[來源](https://www.threads.com/@boris_cherny/post/DYOBHmqmiR5/i-needed-to-book-flights-for-a-bunch-of-upcoming-travel-as-always-i-used-claude)）
 
 ### 前端與瀏覽器整合
 - **Chrome 擴充功能**：讓 Claude 直接在瀏覽器中驗證前端輸出，可迭代修正網頁外觀與功能。
