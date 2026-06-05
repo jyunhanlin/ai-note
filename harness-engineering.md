@@ -213,12 +213,12 @@ Hook 與 feedback 設計的核心心法。
 
 五個面向不是並排的清單，而是一個**迴路**；更關鍵的是，每個面向綁死**一個它獨佔的問題**——這是讓講解不糊焦的核心紀律：講某個面向時，一旦發現自己在回答別的面向的問題，就是越界了。
 
-```
-   ┌────────── 回授：失敗訊號反向清理 Context ──────────┐
-   ▼                                                   │
-Context → Tools → Permission → Workflow → 產出 → Verification
-                                                  ├ in-loop（餵模型，修下一步）
-                                                  └ observability（餵 operator，給人看）
+```mermaid
+flowchart LR
+    C[Context] --> T[Tools] --> P[Permission] --> W[Workflow] --> O[產出] --> V[Verification]
+    V --> IL["in-loop（餵模型，修下一步）"]
+    V --> OB["observability（餵 operator，給人看）"]
+    V -. 失敗訊號反向清理 Context .-> C
 ```
 
 |面向            |它獨佔的問題           |
