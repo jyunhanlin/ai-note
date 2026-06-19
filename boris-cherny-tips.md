@@ -123,6 +123,10 @@
 - **Cowork Dispatch**：Claude Desktop App 的安全遠端控制，可透過 MCP 和瀏覽器處理郵件、管理檔案等非編碼任務，Boris 每天用它遠端處理 Slack 和電子郵件。
 - **Cowork + Opus 4.7 自動完成現實世界任務**（2026 年 5 月分享）：將個人偏好（如航班艙等、飯店需求）寫進 Cowork instructions，讓 Opus 4.7 自動開啟瀏覽器、瀏覽多個網站並完成預訂。Boris 分享：過去 Cowork 訂機票表現平平，但搭配 Opus 4.7 後首次成功一次性完成——在他繼續用 Claude Code 工作的同時，Cowork 幫他訂了 8 趟班機和 5 間飯店。（[來源](https://www.threads.com/@boris_cherny/post/DYOBHmqmiR5/i-needed-to-book-flights-for-a-bunch-of-upcoming-travel-as-always-i-used-claude)）
 
+### Artifacts（互動式產物）
+
+- 在 Claude Code 中使用 **Artifacts** 製作各種視覺化產物：複雜程式碼的視覺化解說、系統架構圖、多個動畫方案的快速預覽、資料分析，以及可與團隊分享的儀表板（dashboard）。Boris 形容這徹底改變了他與 Claude 協作的方式。（[來源](https://www.threads.com/@boris_cherny/post/DZvXImnEr6u)）
+
 ### 前端與瀏覽器整合
 
 - **Chrome 擴充功能**：讓 Claude 直接在瀏覽器中驗證前端輸出，可迭代修正網頁外觀與功能。
