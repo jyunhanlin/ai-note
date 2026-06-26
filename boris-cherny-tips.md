@@ -103,6 +103,13 @@
 
 ## 進階與隱藏功能
 
+### Claude Tag 與「Claude Everywhere」（2026 年 6 月發布）
+
+- **Claude Tag**：可在 Slack 中直接「@（tag）」Claude，讓它在頻道內與團隊一起協作。特色是**主動（proactive）**、**多人協作（multiplayer）**，並擁有自己的身分與記憶——不只是 Slack 裡的一個 bot，而是會根據你的指示主動完成工作、跨頻道調整行為的團隊成員。你可以把它 tag 進來、委派任務，然後專注在其他事情上。
+- Claude Tag 建構於 Claude Code 之上，是「Claude Everywhere」的開端。Boris 表示這幾個月來徹底改變了團隊使用 Claude 的方式，他所在產品團隊**有 65% 的新程式碼**由內部版本的 Claude Tag 產生。
+- 安全性採**多層防護**：模型訓練層的防護、分類器、限制資源存取（網站與憑證可見性），並尊重頻道／工作區的邊界。
+- （[來源](https://www.threads.com/@boris_cherny/post/DZ79_o3mjX6)）
+
 ### 努力程度控制（Effort Levels）
 
 - 預設努力程度已調整為 **xhigh**（介於 high 和 max 之間的新等級），在推理深度與延遲之間取得平衡。
@@ -156,6 +163,10 @@
 
 - 啟用解釋輸出模式，讓 Claude 說明它讀到的程式碼。
 - 要求以 HTML 視覺化呈現，或使用 ASCII 圖表理解不熟悉的架構。
+
+### 研究與非編碼任務
+
+- Claude Code 不只用於寫程式，也能勝任研究型的分析與探索。Boris 分享了一個有趣範例——用 Claude Code **解讀「線性文字 A（Linear A）」**，一種源自克里特島、約 3,500 年歷史的古米諾斯文字（他並補充：「希望能通過同儕審查 🤞」）。展示了把 Claude Code 應用於非編碼的資料分析與假說探索的潛力。（[來源](https://www.threads.com/@boris_cherny/post/DZx8r6zEmK_)）
 
 ---
 
