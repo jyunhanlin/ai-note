@@ -89,6 +89,7 @@
 - 常用子代理範例：
   - **code-simplifier**：Claude 完成任務後自動簡化程式碼。
   - **verify-app**：端到端測試，包含詳細的驗證指令（截圖、模擬器建置、測試執行）。
+- **子代理預設在背景執行**（下一版 Claude Code）：子代理啟動後預設於背景執行，你可以在它們工作的同時繼續與 Claude 對話，不必等待。若希望某個 agent 在前景執行，只要直接告訴 Claude 即可。（[來源](https://www.threads.com/@boris_cherny/post/DaLaMjKmm-l)）
 
 ### Hooks（自動化鉤子）
 
@@ -133,6 +134,7 @@
 ### Artifacts（互動式產物）
 
 - 在 Claude Code 中使用 **Artifacts** 製作各種視覺化產物：複雜程式碼的視覺化解說、系統架構圖、多個動畫方案的快速預覽、資料分析，以及可與團隊分享的儀表板（dashboard）。Boris 形容這徹底改變了他與 Claude 協作的方式。（[來源](https://www.threads.com/@boris_cherny/post/DZvXImnEr6u)）
+- **Artifacts 現已開放 Pro 與 Max 方案使用**：只要要求 Claude 產生一個 artifact，它會撰寫程式碼、即時發佈到 claude.ai，並在持續工作的同時即時更新內容。產出的頁面預設為帳號私有，且完全自包含（self-contained）。（[來源](https://www.threads.com/@boris_cherny/post/DaTdB6Zml6_)）
 
 ### 前端與瀏覽器整合
 
