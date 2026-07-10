@@ -152,6 +152,18 @@
 - **`--bare`**：跳過自動載入本地設定，讓 SDK 啟動速度提升最多 10 倍；當你明確指定 system prompt 和 MCP 時使用。
 - **`--add-dir`**：授予 Claude 存取主工作目錄以外額外 repository 的權限，適合跨多個 repo 的任務。
 
+### `/checkup`（環境健檢與清理）
+
+- **`/checkup`**：一鍵健檢並優化你的 Claude Code 環境設定，執行任何變更前都會先與你確認。主要功能包括：
+  - 清理未使用的 skills／MCPs／plugins，節省 context。
+  - 將本地 `CLAUDE.md` 與已提交（checked-in）的 `CLAUDE.md` 去除重複內容。
+  - 把過大的根目錄 `CLAUDE.md` 拆解成巢狀的 `CLAUDE.md` 與 skills。
+  - 關閉執行緩慢的 hooks。
+  - 將 Claude Code 更新到最新版本。
+  - 預設啟用 auto mode。
+  - 預先核准經常被拒絕的唯讀指令。
+- （[來源](https://www.threads.com/@boris_cherny/post/DajNgi_EXbe)）
+
 ---
 
 ## 應用情境
