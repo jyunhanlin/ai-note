@@ -14,7 +14,8 @@
 2. [核心工作流程](#核心工作流程)
 3. [客製化與自動化](#客製化與自動化)
 4. [進階與隱藏功能](#進階與隱藏功能)
-5. [應用情境](#應用情境)
+5. [團隊導入 AI 的框架](#團隊導入-ai-的框架)
+6. [應用情境](#應用情境)
 
 ---
 
@@ -163,6 +164,17 @@
   - 預設啟用 auto mode。
   - 預先核准經常被拒絕的唯讀指令。
 - （[來源](https://www.threads.com/@boris_cherny/post/DajNgi_EXbe)）
+
+---
+
+## 團隊導入 AI 的框架
+
+### 團隊導入 AI 的四個階段（Steps of AI Adoption，2026 年 7 月分享）
+
+- Boris 觀察到常見情況：「一個人用 Claude 把產出提升了 10 倍，但組織其他人還沒跟上。」他將團隊導入 AI 的過程歸納成常見的**四個階段**，並整理成一份視覺化指南。（[來源](https://www.threads.com/@boris_cherny/post/Da4CkQnEea-)）
+- 沒有唯一正確的路徑，每個團隊與公司都不同。但在每個階段，**單靠增加 token 額度並不足以前進**——要進到下一階段，你必須找出並拆解下一組瓶頸（bottlenecks），並建立起下一組防護機制（guardrails）。（[來源](https://www.threads.com/@boris_cherny/post/Da4CkzAkZj1)）
+- 實務上這代表：給 Claude 端到端**自我驗證**工作成果的方法；為權限開啟 **auto mode**；**預設啟用自動化 code review 與 security review**；並使用能**同時管理多個 agent** 的介面——CLI 的 **Agent view**、Desktop app、iOS／Android app 以及 Claude Tag。（[來源](https://www.threads.com/@boris_cherny/post/Da4ClXKkVTD)）
+- 要達到更高的自動化層級，代表善用 `/loop`、`/batch`、**動態工作流程（dynamic workflows）**，以及**子代理的 worktree 隔離（worktree isolation for subagents）**。重點不在於單一功能，而是搭配正確的防護機制，選用正確的功能，讓 Claude 能自動化「整類（entire classes）」工作，並讓團隊能信任其輸出。（[來源](https://www.threads.com/@boris_cherny/post/Da4Cl3-EcQ1)）
 
 ---
 
