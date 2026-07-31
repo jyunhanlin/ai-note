@@ -112,6 +112,11 @@
 - 安全性採**多層防護**：模型訓練層的防護、分類器、限制資源存取（網站與憑證可見性），並尊重頻道／工作區的邊界。
 - （[來源](https://www.threads.com/@boris_cherny/post/DZ79_o3mjX6)）
 
+### Opus 5 與 Prompt Injection 防護（2026 年 7 月分享）
+
+- **Opus 5 是目前最難被 prompt injection（提示注入）攻擊的模型**。Boris 表示，比起各項評測分數，最讓他興奮的是這點——這在系統卡（system card）中被埋得較深，但橫跨 PI evals 與 red teaming，Opus 5 都很難被成功注入。Opus 5 同時也是很強的編碼、資料分析、設計、生物與知識工作模型。（[來源](https://www.threads.com/@boris_cherny/post/DbL0xw8kSZG)）
+- **疊加多層防護可將注入攻擊成功率降到接近 0**：結合「強化的模型對齊（strong model alignment）」＋「prompt injection 探針（probes）」＋「Claude Code 的 Auto Mode」三層防護後，prompt injection 攻擊的成功率會降到 ~0。實務含意——在 Claude Code 中開啟 **Auto Mode** 並搭配 Opus 5，即可取得目前最佳的注入攻擊防護。（[來源](https://www.threads.com/@boris_cherny/post/DbL0yg7kaqW)）
+
 ### 努力程度控制（Effort Levels）
 
 - 預設努力程度已調整為 **xhigh**（介於 high 和 max 之間的新等級），在推理深度與延遲之間取得平衡。
