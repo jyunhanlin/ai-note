@@ -2,7 +2,7 @@
 title: Harness Engineering
 tags: [agent, claude-code, harness, ai-engineering, prompt-engineering]
 created: 2026-05-01
-last_reviewed: 2026-06-14
+last_reviewed: 2026-08-02
 type: reference
 status: living-document
 sources:
@@ -15,6 +15,8 @@ sources:
   - Anthropic — Claude Code《Dynamic workflows》文件（多 agent 確定性編排 primitive）
   - Birgitta Böckeler — "Harness engineering for coding agent users"（feedforward/feedback controls 切法）
   - 社群實戰報告 — agent teams / dynamic workflows 使用心得（Heeki Park、Michael Habib、Rally 等，2026-03～06）
+  - Thariq（Anthropic）— "The new rules of context engineering for Claude 5 models"（2026-07-25）— §七 第一方實證；完整整理另見 context-engineering.md
+  - 招募端第一方文件（2026 上半年）— Meta / Canva / DoorDash / Coinbase / Sierra / Zapier 的面試政策，與 CodeSignal / HackerRank / CoderPad / Karat 的產品出貨紀錄；§七「harness 能力的市場化」的依據，清單見 §九
 ---
 
 # Harness Engineering：讓 AI Agent 從 Demo 走向生產的工程體系
@@ -128,7 +130,7 @@ Agent = Loop(LLM + Context + Tools)
 | Context Engineering | 給模型什麼資訊                |
 | Harness Engineering | 模型在什麼環境裡做事          |
 
-Context Engineering 是 Harness 的一個組成部分，但 Harness 不等於 Context。它比 Context 更大一層，因為它不只管「餵什麼」，還管：什麼時候能動手、動手時有哪些工具、工具是否需要審批、輸出太長怎麼辦、危險操作怎麼攔、會話如何恢復、中間產物如何持久化、任務失敗後如何修復。
+Context Engineering 是 Harness 的一個組成部分，但 Harness 不等於 Context。它比 Context 更大一層，因為它不只管「餵什麼」，還管：什麼時候能動手、動手時有哪些工具、工具是否需要審批、輸出太長怎麼辦、危險操作怎麼攔、會話如何恢復、中間產物如何持久化、任務失敗後如何修復。中間那一欄（Context Engineering）本身有獨立筆記：[Context Engineering（Claude 5 世代）](./context-engineering.md)，鎖定「這代模型該給它看什麼」的世代差分；本筆記 §四 面向 1 與 §五 5.1 則是它在五面向框架裡的位置。
 
 同樣地，LangChain、LangGraph、CrewAI 這類 SDK 也不等於 Harness——它們回答的是「怎麼造 Agent」，而 Harness 回答的是「Agent 運行時，世界如何與它互動」。可以用 LangChain 實現 Harness 的某個模組，但 LangChain 本身並非 Harness。
 
@@ -684,15 +686,28 @@ Addy Osmani 在這個問題上的觀察是：
 
 **實證對照**：在一個自主多 agent pipeline 的案例裡，底層模型從 Opus 4.5 升到 4.6 之後，作者**整段刪掉** sprint 結構、**完全拿掉** context reset，連負責驗證的 evaluator 在「任務落在模型能力範圍內」時都變成純 overhead 而被設為可選。這些不是「責任位移」，是**元件淘汰**——可見當代模型一升級，harness 的縮減是真實且果斷的。
 
+**第一方實證（2026-07）**：Anthropic 自己揭露，針對 Opus 5 / Fable 5 這代模型，**Claude Code 的系統提示詞砍掉 80% 以上，內部 coding eval 沒有可測量的退步**——這是本筆記目前收到的來源裡，唯一帶公開數字的供應商自陳（上一段的 Opus 4.5→4.6 案例同樣是 Anthropic 來源，但沒有給出比例）。
+
+原文**沒有拆解這 80% 的組成**，只舉了幾個同期的改動當例子：寫死行為的預設值換成指向脈絡的原則、code review 與 verification 抽成按需載入的 skill。（另有一例是把冗長的 tool 說明收斂成精簡描述，但那是 **tool description 那一層**的事，不在系統提示詞的 80% 裡——引用時容易混淆。）
+
+要注意兩件事：一是 eval 是在**它們的**任務分布上量的，不等於你的；二是被刪的**看起來**都是「模型做不到什麼」那類假設，而不是「我想要什麼」那類——後者原文反而說是 skill 最適合承載的東西（同時提醒別把 skill 寫成過度約束）。
+
+> ⚠️ 上一句要看清楚它的地位：原文既沒拆解 80% 的組成、也沒有做這個分類，**能力假設／偏好假設是本 repo 拿自己的框架去讀原文舉的例子**得出的，不是 Anthropic 的說法。展開見 [context-engineering.md §四](./context-engineering.md#四套到自己-repo-的判別法)，該篇也記錄了本機可觀測的驗證項。
+
 換句話說，**每個 harness 元件都編碼一個對「模型現在做不到什麼」的假設**。當假設過時，元件可能**位移、淘汰、或被新元件取代**——三條路都可能。重點是組合在動，而非個別元件不朽。
 
 這也是為什麼 harness 是 living system 而非 static config——更何況模型 post-training 過程會把流行的 harness pattern 學進去，造成模型對特定 harness 過擬合（training-loop feedback）。沒有「最佳 harness」，只有「適合當下這代模型的 harness」。
 
-### 趨勢觀察：HaaS 與 harness convergence
+### 趨勢觀察：HaaS、harness convergence，與 harness 能力的市場化
 
 - **Harness-as-a-Service(HaaS)**：產業重心從「建在 LLM API 上（自己拼 orchestration）」 → 「建在 harness framework 上（選一套穩定的 harness 來調）」。Claude Code、Cursor、Codex 等就是這種服務化 harness 的代表
 - **Harness pattern 收斂**：頂級 coding agent(Claude Code、Cursor、Codex、Aider、Cline)的設計越來越像彼此，反而比模型差異更明顯——「編輯與讀取分離」「Plan Mode」「sub-agent」「lifecycle hook」這些 pattern 已是業界共識
 - **實務含意**:**如果你發現 X 公司的 agent 比 Y 公司強，差距通常在 harness 工程，不是模型基礎能力**。這也意味著對 agent 採購方/使用方來說，評估重點該放在 harness 設計而非底層模型編號
+- **harness 能力開始成為被評測的招募項目（2026 上半年，本 repo 補）**：多家公司把「候選人怎麼駕馭 AI agent」寫進正式面試關卡，而且都是**第一方公開文件**——Meta careers 站寫候選人「**被預期**（expected）」使用內建的 AI 助手（跑在 CoderPad 上，可選 Claude／ChatGPT／Gemini／Meta 自家模型，但明訂「不授權任何外部 AI 工具」；⚠️ 範圍是**部分職缺**，頁面主文寫 "Select roles"、FAQ 寫 "many of Meta's interviews"，不是全部）；Canva 的標題直接是〈Yes, You Can Use AI in Our Interviews. **In fact, we insist**〉；DoorDash 明列 Cursor／Claude Code／Codex 且「agent/autopilot 模式都可以用」；Coinbase 說「我們評估的是**你如何指揮 AI、如何批判它的輸出**」；Sierra 乾脆砍掉演算法關卡，改成兩小時自選工具把東西做出來。廠商端同步出貨（**帶日期的 release notes 與付費 SKU，不是 thought leadership**）：CodeSignal 的產品名就叫 **Agentic Coding Assessments**（2026-04-02）、HackerRank 的面試 IDE 有 Plan／Ask／**Agent** 三模式（2026-04 release notes）、CoderPad 的 AI Assist 已 GA 且所有 pad 預設開啟。
+  - **這條之所以收進本筆記，是因為他們說在評的東西跟[面向 5](#面向-5verification-驗證)是同一件事**：Coinbase 寫「我們不是在測記憶或 pattern recall；我們評估的是**你如何指揮 AI、如何批判它的輸出**，以及如何判斷模型什麼時候出錯」；Zapier 說在「即時觀察候選人與 AI 協作……怎麼下 prompt、怎麼推翻輸出、怎麼調整」（對應 [ihower §四 mid-run injection](./ihower-harness-engineering.md)）；CoderPad 調查中最常被評的能力是「能抓出並修正 AI 的錯誤」(66%)，其次「能解釋 trade-off」(56%)。也就是說，上一條「評估重點該放在 harness 設計而非模型編號」，現在連**評估人**都適用了
+    - ⚠️ Meta 的評分項要用它自己的措辭：FAQ 寫的是 **problem-solving、coding、debugging、collaboration**。有二手來源把它轉述成含「verification」一項，本筆記**不採用**——那不是第一方原話
+  - ⚠️ **反向證據要一起讀，別當成單向趨勢**：Karat 自家數據說 **62% 的組織仍禁止**在技術面試用 AI、不到 30% 有在更新評測方式；CoderPad 的同類調查則是 34% 不允許——兩個數字的樣本、問法、時間都不同，**不可互相換算**，只能說落在三分之一到三分之二之間。同一批廠商在賣 AI 輔助的同時也在賣防作弊監考（HackerRank 把兩者綁進**同一個** SKU，CoderPad 在 AI Assist 旁邊出 Integrity Toolkit）——市場沒有選邊，是兩邊收錢在避險。HackerRank 自己也承認「AI 時代面試方法的**預測效度資料仍在累積中**」。至於常被拿來當反證的「實體面試回歸」要小心：Pichai 說會加一輪實體面試時**沒有**把原因歸給 AI 作弊（同段還稱 AI 輔助寫程式是「一項資產」），Cisco 講的則是 **deepfake 假冒候選人**——那跟「AI 輔助寫程式」是兩件事，趨勢報導經常混掉
+  - 不可引用的數字（查證後剔除）：各種作弊盛行率（「1/4 候選人作弊」「71% 承認」）全來自賣防作弊產品的廠商部落格；CoderPad 的「35,000+ 場 AI-assisted 面試」在其官網查無出處；Gartner「72.4% 改用實體面試」取不到原始文件，所有出現都經由同一篇二手報導
 
 ---
 
@@ -723,6 +738,7 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
 - **Fred Schott**（@FredKSchott）— [Flue framework](https://x.com/FredKSchott/status/2050274923852210397)
 - **Birgitta Böckeler**, _"Harness engineering for coding agent users"_ — [martinfowler.com](https://martinfowler.com/articles/harness-engineering.html)（feedforward/feedback controls）
 - **Vivek Trivedy**, _"The Anatomy of an Agent Harness"_（2026-03-10）— [LangChain blog](https://www.langchain.com/blog/the-anatomy-of-an-agent-harness)
+- **Thariq**（@trq212, Anthropic Claude Code）, _"The new rules of context engineering for Claude 5 models"_（2026-07-25）— [x.com](https://x.com/trq212/status/2080710971228918066)；§七 的第一方實證來源，完整整理見 [context-engineering.md](./context-engineering.md)
 
 ### 社群實戰報告（§六「社群實戰校準」的依據）
 
@@ -740,6 +756,37 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
 - Vercel agent 工具精簡實驗（移除約八成工具，任務成功率反升）
 - OpenAI Codex Agent 案例（少數工程師數月生成百萬行程式碼）
 
+### 招募端證據（§七「harness 能力的市場化」的依據，2026-08-02 查證）
+
+雇主第一方政策：
+
+- **Meta** — [metacareers.com/hiring-process](https://www.metacareers.com/hiring-process/)（候選人「被預期」使用內建 AI 助手）
+- **Canva** — Simon Newton（Head of Platforms），[Yes, You Can Use AI in Our Interviews. In fact, we insist](https://www.canva.dev/blog/engineering/yes-you-can-use-ai-in-our-interviews/)（2025-06-11）；後續談格式：[AI interview success](https://www.canva.dev/blog/engineering/ai-interview-success/)（2025-10-20）
+- **DoorDash** — [Rebuilding its engineering interviews around AI](https://careersatdoordash.com/blog/doordash-is-rebuilding-its-engineering-interviews-around-ai/)（2026-03-19）
+- **Coinbase** — [Interviewing engineers in the AI era](https://www.coinbase.com/blog/interviewing-engineers-in-the-ai-era-lessons-from-a-year-of-rebuilding)（2026-07-13）
+- **Sierra** — [The AI-native interview](https://sierra.ai/blog/the-ai-native-interview)（2026-04-22）
+- **Zapier** — [Raising the AI fluency bar in hiring](https://zapier.com/blog/raising-ai-fluency-bar-in-hiring/)（2026-03-31）
+- **Applied Intuition** — [Hiring engineers in the age of agents](https://www.appliedintuition.com/engineering-blog/hiring-engineers-age-of-agents)（2026-07-22，phone screen 禁用／onsite 開放的分段政策）
+- **Anthropic** — [candidate AI guidance](https://www.anthropic.com/candidate-ai-guidance)（2025-07-10 更新；live 面試不得用 AI，take-home 除非另行說明）
+
+廠商出貨紀錄：
+
+- **CodeSignal** — [Agentic Coding Assessments 發布](https://www.prnewswire.com/news-releases/codesignal-launches-industry-first-agentic-coding-assessments-for-ai-era-engineering-hiring-302732265.html)（2026-04-02）
+- **HackerRank** — [AI-Assisted Interviews 文件](https://support.hackerrank.com/articles/5821380141-ai-assisted-interviews)、[2026-04 release notes](https://support.hackerrank.com/articles/4368819843-april-2026-release-notes)、[AI Add-On（與監考綁同一 SKU）](https://www.hackerrank.com/features/hiring/ai-add-on)
+- **CoderPad** — [Interview AI Assist 文件](https://coderpad.io/resources/docs/interview/pads/interview-ai-assist/)（2026-07-02 更新）
+- **Karat** — [NextGen Interviews 發布](https://markets.financialcontent.com/stocks/article/bizwire-2025-12-10-karat-launches-nextgen-interviews-the-first-human-led-ai-enabled-talent-evaluation-solution)（2025-12-10）
+
+調查數據（互相衝突，勿當定論）：
+
+- CoderPad [State of Tech Hiring 2026](https://coderpad.io/survey-reports/coderpad-state-of-tech-hiring-2026/)（34% 不允許；最常被評的能力「抓出並修正 AI 的錯誤」66%）
+- Karat [engineering interview trends 2026](https://karat.com/engineering-interview-trends-2026/)（62% 仍禁止、不到 30% 在更新評測）
+- Stack Overflow [Developer Survey 2025](https://survey.stackoverflow.co/2025/ai/)（樣本與方法論最佳者）
+
+反向／須小心的來源：
+
+- Sundar Pichai，[Lex Fridman Podcast #471 逐字稿](https://lexfridman.com/sundar-pichai-transcript/)（2025-06-05）——⚠️ 他**沒有**把恢復實體面試歸因於 AI 作弊，作弊框架是媒體加的
+- HackerRank，[How to Build a Technical Interview Process for the Agentic Era](https://www.hackerrank.com/blog/how-to-build-a-technical-interview-process-for-the-agentic-era/)（2026-06-15）——廠商自承預測效度未驗證
+
 ### 校對紀錄
 
 - **2026-05-01**：初版，六大面向 + Claude Code mapping
@@ -755,7 +802,7 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
 - **2026-05-29**：對照一個自主多 agent pipeline 實證案例（Opus 4.5→4.6）做框架校正
   - **修內部矛盾**：§七「Don't Shrink, They Move」原寫「元件職責改變但元件本身仍存在」與心法 1「該刪就刪」打架；改為「組合空間位移（位移／淘汰／新生三條路）」，並補入 4.6 升級後果斷刪元件的實證
   - §四 面向 4：補「生成/評估分離是必要不充分」（evaluator 本身也是 LLM，會放水）+ skeptical 調教 + Sprint Contract pattern
-  - §五 5.4：新增「評分標準設計」sub-section（拆維度／加權弱項／硬門檻／few-shot 校準／措辭引導）
+  - §五 5.4：新增「評分標準設計」sub-section（拆維度／加權弱項／硬門檻／few-shot 校準／措辭引導）⚠️ 此處編號已過時，2026-06-05 重構後該 sub-section 位於 **§五 5.5**（見下方該次紀錄）；引用時別照抄這一行
   - §四 面向 1：補 context anxiety 與 compaction vs reset 的本質差異（模型相依的另一條光譜）
   - §六：新增「互動式 harness vs 自主 pipeline harness」正交軸
   - 心法 2：補「evaluator 價值是連續函數」的精細化判準
@@ -779,5 +826,18 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
   - §一：補 harness 的**上邊界**（loop 在其上一層）與包含關係 `loop ⊃ harness ⊃ Loop(LLM+Context+Tools)`；能力式條目註明 Addy 把 harness 界定在單 agent
   - §六：自主 pipeline 端標註為 harness ↔ loop 的**接縫**，指向 loop 筆記
   - §九：來源新增 Addy《Loop Engineering》
+- **2026-08-02**：對照 Anthropic Thariq《The new rules of context engineering for Claude 5 models》(2026-07-25)
+  - §七：補**第一方實證**——Claude Code 系統提示詞砍 80%＋eval 未退步；同時標註三件事：eval 是它們的任務分布、原文沒拆解 80% 的組成（tool 說明的縮減是另一層）、以及「能力假設 vs 偏好假設」這條分界是**本 repo 讀出來的、不是 Anthropic 的說法**（獨立 ⚠️ 區塊）
+  - §一：三分表後補指路——中間欄 Context Engineering 拆為獨立筆記 [context-engineering.md](./context-engineering.md)，本篇 §四 面向 1 與 §五 5.1 維持它在五面向裡的位置，兩邊採薄委派不重複
+  - §九／frontmatter：來源新增 Thariq
+  - **待處理 ①（新筆記 §五 標為未解衝突）**：面向 1 與 §五 5.1 都說 CLAUDE.md 該寫「架構、build/test 指令、命名約定」，但架構與命名約定多半是 agent 看 repo 就推得出來的，與 Anthropic 現行建議（只放看不出來的 gotcha）相左。5.1 已含「已知陷阱」故只錯一半，要重估的是「架構／命名約定」兩項
+  - **待處理 ②**：§五 5.5 的「few-shot 校準」（給 evaluator 評分範例）與 Anthropic「別用範例、改設計介面」的新建議可能相衝。但原文把該建議限定在 **tool 使用**、沒談 evaluator，所以只是疑似——沒有實測前不動
 
-下次 review 觸發點：Claude Code 主版本變動、出現新的有名 harness pattern、模型世代跨越（例如下一代 reasoning model 大規模可用）。
+- **2026-08-02（同日補記）**：§七 趨勢觀察新增第四條——**harness 能力的市場化**（駕馭 agent 成為被評測的招募項目），並改寫該節標題。§九 新增「招募端證據」來源區，雇主政策與廠商出貨紀錄分列。
+  - **收錄理由不是「面試很有趣」，而是雇主公布的評分項跟本筆記面向 5 重合**（指揮 AI 並批判其輸出、抓出並修正 AI 的錯誤、解釋 trade-off），等於外部對「評估重點在 harness 設計」這條論點的獨立佐證
+  - **逐條回原文核對過（2026-08-02）**，並因此修掉自己兩處錯誤：① 原先寫「Meta 的評分項含 verification」——那是二手轉述，Meta FAQ 的原話是 problem-solving／coding／debugging／collaboration，已改用第一方措辭並加註不採用二手版本；② 補上 Meta 的適用範圍是**部分職缺**（"Select roles"／"many of Meta's interviews"），原先漏寫會讀成全公司。Meta 的 FAQ 文字藏在收合區塊，curl 只拿得到 720 字元的殼，是用瀏覽器讀 DOM 才驗到的；Coinbase 與 DoorDash 擋 CLI 抓取，分別以文字代理與瀏覽器確認原句
+  - 同段強制帶反向證據：62% vs 34% 兩份調查衝突且不可換算、廠商把 AI 輔助與監考綁同一 SKU、廠商自承預測效度未驗證；並修掉一個流傳中的誤讀——Pichai 恢復實體面試**沒有**歸因於 AI 作弊，Cisco 講的是 deepfake 假冒候選人而非 AI 輔助寫程式
+  - 明列三個**查證後剔除**的數字（作弊盛行率、CoderPad 35,000+ 場、Gartner 72.4%），避免日後又被撿回來引用
+  - **本次調查的觸發來源已判定不可用**：一則 X 貼文轉載匿名 Reddit 貼文，聲稱 OpenAI onsite 有 beta 的「Agentic Coding Round」。查證結果——OpenAI 官方面試指南無此內容、無具名第一手、無新聞佐證、原貼文與帳號查無，且整套說法逐字散佈於多個無署名的面試準備 SEO 站且彼此矛盾；唯一相關的第一方證據（2025-09 OpenAI 招募人員要候選人準備「無 autocomplete 與 debugger」的 CoderPad）方向相反。**不入庫、不引用**；真正的趨勢證據全部來自雇主與廠商的第一方文件，與該傳聞無關
+
+下次 review 觸發點：Claude Code 主版本變動、出現新的有名 harness pattern、模型世代跨越（例如下一代 reasoning model 大規模可用）、招募端出現方法論可查的大樣本調查（可取代目前互相衝突的 62% vs 34%）。

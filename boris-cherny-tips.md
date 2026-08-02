@@ -76,6 +76,8 @@
 - 隨時間無情地迭代這個文件，直到錯誤率下降。
 - 將 `CLAUDE.md` 提交到 git，讓整個團隊共同維護，持續添加新發現的錯誤。
 
+> ⏳ **時效註記（2026-08-02 補）**：Anthropic 在 2026-07 明講「把 CLAUDE.md 當成所有已知做法的中央倉庫」是**迷思**。本節的方向沒錯——錯誤驅動的迭代產出的正是官方要的 gotcha——但**「無情迭代、越寫越長」那半要收手**：條目越多越容易跟 system prompt／skill／當下指令打架，模型得先花推理排解。改成收斂到「看 repo 推不出來的 gotcha」，並用 `/doctor` 定期瘦身（見下方 §`/checkup`）。「提交到 git 給團隊共維護」仍然成立：新的自動記憶存在 `~/.claude/projects/<專案>/memory/`，per-project 且在 repo 外，取代不了版控的那一份（位置為 2026-08-02 本機實測）。詳見 [context-engineering.md](./context-engineering.md)。（[來源](https://x.com/trq212/status/2080710971228918066)）
+
 ### 斜線指令（Slash Commands）
 
 - 將常用工作流程建立成可重用的斜線指令，儲存在 `.claude/commands/` 並納入版本控制（與團隊共用）。
@@ -159,6 +161,8 @@
 - **`--add-dir`**：授予 Claude 存取主工作目錄以外額外 repository 的權限，適合跨多個 repo 的任務。
 
 ### `/checkup`（環境健檢與清理）
+
+> ⏳ **更名註記（2026-08-02 補）：這個指令的正式名稱現在是 `/doctor`，`/checkup` 仍可用（是它的別名）。** Anthropic 2026-07 的 context engineering 文章推薦用 `/doctor` 來 rightsize skills 與 CLAUDE.md，做的正是下列同一批事。基礎（本機實測）：binary v2.1.220 註冊為 `name:"doctor",aliases:["checkup"]`；`claude --help` 的 `doctor` 說明寫著「For a full checkup that can also fix issues, run /doctor in a session」。下列功能清單仍以 Boris 原貼文為準。
 
 - **`/checkup`**：一鍵健檢並優化你的 Claude Code 環境設定，執行任何變更前都會先與你確認。主要功能包括：
   - 清理未使用的 skills／MCPs／plugins，節省 context。

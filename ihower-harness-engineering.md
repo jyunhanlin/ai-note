@@ -2,7 +2,7 @@
 title: 駕馭工程（ihower 系列）
 tags: [agent, harness, ai-engineering, feedback-loop, agent-development, ihower]
 created: 2026-07-07
-last_reviewed: 2026-07-07
+last_reviewed: 2026-08-02
 type: reference
 status: living-document
 sources:
@@ -10,6 +10,7 @@ sources:
   - ihower 演講投影片《給 Agent 開發者的 Harness+Loop Engineering》— https://ihower.tw/presentation/harness.html
   - 本 repo：harness-engineering.md（使用者視角：單一 agent 運行環境的五面向）
   - 本 repo：loop-engineering.md（harness 上一層的自走 loop）
+  - 本 repo：context-engineering.md（§八 過期性論證的 context 層實例，源自 Thariq 2026-07-25）
 ---
 
 # 駕馭工程：給 Agent 開發者的 Harness Engineering（ihower 系列）
@@ -312,6 +313,7 @@ Anthropic 官方的 ralph-wiggum plugin 與原版 Ralph **機制相反**：plugi
 
 - **context reset 三代拆三層**：Sonnet 4.5 有 context anxiety（context 快滿就草草收尾）→ 加定時 reset＋結構化交接檔；Opus 4.5 讓 reset 多餘；Opus 4.6 連 sprint decomposition 都拿掉效果更好。「這些元件一月還在承重，三月就成了死碼」（Portkey, The Harness Tax）。
 - **TodoWrite → Tasks**：初期 TodoWrite＋每 5 輪 system reminder 防偏離；模型變強後提醒反而逼模型死守清單、且多子代理無法協作在扁平清單上——**scaffolding trap**：舊腳手架不只變死重，還反過來跟模型新能力衝突。換成 Tasks 系統：寫到磁碟、跨 session 持久、任務有依賴、多 agent 共用（等於把 Ralph 的外部 plan 檔內建化）。同文另一例：早期用 RAG 向量庫給 context，後來模型夠強，直接給 Grep 讓它自己搜，效果更好也更不易壞。
+- **系統提示詞本身也是腳手架（2026-07 後續案例，本 repo 補）**：Anthropic 針對 Opus 5 / Fable 5 把 **Claude Code 系統提示詞砍掉 80% 以上、內部 coding eval 未見可測量退步**。這是同一個過期性論證的 **context 層版本**——前兩例過期的是 workflow 腳手架（sprint／todo 清單），這次過期的是**指令本身**。而且它示範了 scaffolding trap 在 context 層的樣子：舊的硬規則不只變成死重，還會跟 system prompt／skill／使用者三方互相衝突，逼模型先花推理去調和。細節與本機驗證見 [context-engineering.md](./context-engineering.md)。
 
 過期加速的機制是**共演化迴圈**：harness primitive 上線 → 出現在幾百萬筆 agent 軌跡 → 變成下一代模型訓練資料 → primitive 被練進模型本能 → harness 那層拆掉。例：apply_patch 被後訓練進模型；Fable 5「擅長在迴圈中自我修正」寫進官方賣點（部分取代 Stop hook 退件那類腳手架）；早期 Claude 玩寶可夢要一整套地圖導航 harness，Fable 5 純視覺極簡 harness 就破關。
 
@@ -368,6 +370,7 @@ Anthropic 官方的 ralph-wiggum plugin 與原版 Ralph **機制相反**：plugi
 | ratchet（雙向棘輪）                     | harness 筆記 心法 1                                                   | 同源；「拆約束」半邊在第 8 篇展開成過期性                              |
 | Böckeler 2×2（前饋/回饋 × 運算/推論）   | harness 筆記 §四 開頭的 feedforward/feedback 註                       | ihower 把它升格為主座標系並擴到非 coding 場景                          |
 | Model-Harness Fit／harness 會過期       | harness 筆記 §七「Harnesses Don't Shrink, They Move」                 | 結論一致；ihower 補四層拆解＋「內層留原廠」守則＋eval/judge 永不過期線 |
+| 會過期 vs 不會過期（eval/judge 那條線） | [context-engineering.md](./context-engineering.md) §四（能力假設／偏好假設） | 同一條線的兩端：ihower 從驗證講（模型吸收不了「定義成功」），該篇從指令講（模型猜不到「你要什麼」） |
 | 六項內建能力                            | harness 筆記 面向 1–4 的 primitives                                   | 視角差：開發者的「選配清單」vs 使用者的「治理面向」                    |
 | 裁判獨立性光譜（自審/transcript/grader）| harness 筆記 §五 5.5 evaluator 設計、面向 5 生成/評估分離             | ihower 用三個真實產品把「分離」量成一條可調的光譜＋成本模型            |
 
@@ -400,10 +403,12 @@ ihower，「給 Agent 開發者的駕馭工程」系列（2026-06-26，演講書
 - [harness-engineering.md](./harness-engineering.md) — 使用者視角：單一 agent 運行環境的五面向、四心法、Claude Code primitives mapping
 - [loop-engineering.md](./loop-engineering.md) — harness 上一層的自走 loop（心跳／跨 run 記憶／判停）＝本系列的時機④
 - [boris-cherny-tips.md](./boris-cherny-tips.md) — Boris Cherny 的 Claude Code loop primitive 實際用法（/loop、/schedule、/goal），與第 6 篇「把自己移出迴圈」同主題的使用者端筆記
+- [context-engineering.md](./context-engineering.md) — 第 8 篇過期性論證的 **context 層實例**（Anthropic 第一方，2026-07）；其 §四「能力假設 vs 偏好假設」是本系列「eval/judge 永不過期」那條分界線在指令端的對應
 
 ### 校對紀錄
 
 - **2026-07-07**：初版。9 篇逐篇萃取後按系列自身骨架（六能力 → 定義與四時機 → 自我改進 → 過期性 → 選型）整理；重疊內容採「薄、委派型」紀律連回 harness-engineering.md 與 loop-engineering.md；§十 補視角對照表與「success is silent vs 成功也要設計」的調和。
   - 發布前 9 篇逐篇覆核，修正：Ralph 的「編譯器專案」與「$297 MVP」二事分開（原誤併為一件）、skillify 10 步清單歸屬改回 Garry Tan、Claude Agent SDK 移除原文沒有的「能力最齊」、boris-cherny-tips 指向改為 /loop 排程用法（該檔並無 259 PR 實例）技術細節注意：Claude Code /goal 的 Haiku／刪減 transcript 等內部機制是 ihower 用 mitmproxy 攔包的觀察（非官方文件，可能隨版本改動）；「OpenAI 把自我審計練進模型」是作者標明的合理推測。
+- **2026-08-02**：§八 補一則後續案例——Anthropic 砍 Claude Code 系統提示詞 80%（Thariq, 2026-07-25），作為過期性論證的 **context 層**版本（前兩例都在 workflow 層）；§十 對照表與 §十一 內部連結新增 [context-engineering.md](./context-engineering.md)，標出它 §四 與本系列「eval/judge 永不過期」的對應關係；frontmatter sources 同步。ihower 系列本身的萃取內容未動，§八 只追加一則標記為「本 repo 補」的後續案例。
 
 下次 review 觸發點：系列若有更新或勘誤、Claude Code /goal 與 Codex Goals 機制大改、本 repo harness 筆記重構時同步對照表。

@@ -79,6 +79,10 @@ Now, please document:
 - Update user info API
 ```
 
+> ⚠️ **Scope caveat (added 2026-08-02).** For Claude 5 models, Anthropic advises *against* teaching by example — examples constrain the model to a narrow exploration space. The replacement is interface design: encode the intent in parameter names and enums rather than demonstrating it.
+>
+> That guidance is explicitly scoped to **tool usage**, and to the design of tools, scripts and files. It says nothing about one-shot, in-request examples like the one above. Whether it generalises here is **untested** — flagging it so the tension is visible, not asserting the pattern is obsolete. See [context-engineering.md §2.2](./context-engineering.md#22-給範例--設計介面).
+
 ### Set Constraints
 
 ```
@@ -296,3 +300,7 @@ Decision advice: [adopt/watch/abandon] + reason
 - https://www.promptingguide.ai/zh
 - https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/
 - https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview
+
+## Related notes in this repo
+
+- [context-engineering.md](./context-engineering.md) — the other half of the picture: this file covers **how to phrase a single request**; that one covers **what standing information the model should see**, and where the Claude 5 generation reversed prior advice (including the few-shot caveat above).
