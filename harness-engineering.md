@@ -13,6 +13,7 @@ sources:
   - Anthropic — context engineering 研究
   - Anthropic — 自主多 agent pipeline 實證案例（Opus 4.5→4.6：sprint / evaluator / 評分標準設計）
   - Anthropic — Claude Code《Dynamic workflows》文件（多 agent 確定性編排 primitive）
+  - 本 repo：graph-engineering.md（面向 4 的拓樸深潛；v2.1.220 Workflow 工具契約校準）
   - Birgitta Böckeler — "Harness engineering for coding agent users"（feedforward/feedback controls 切法）
   - 社群實戰報告 — agent teams / dynamic workflows 使用心得（Heeki Park、Michael Habib、Rally 等，2026-03～06）
   - Thariq（Anthropic）— "The new rules of context engineering for Claude 5 models"（2026-07-25）— §七 第一方實證；完整整理另見 context-engineering.md
@@ -350,7 +351,7 @@ Demo 級別的 agent 靠的是「模型大概會聽話」；Harness 級別的 ag
 - **上下文隔離子 agent**：研究 agent 只能讀、規劃 agent 只設計、執行 agent 才有完整工具權限。每個子 agent 只接觸自己需要的資訊，避免被「流雜訊」污染
 - **Sprint Contract（驗收標準先協商）**：在自主 generator/evaluator pipeline 裡，兩個 agent 在寫 code 前先透過檔案來回協商「done 長什麼樣」，把驗收標準固定下來再開工。這跟上面「探索-規劃-行動」互補——後者是單 agent 對自己對齊計畫，前者是**兩個獨立 agent 互相對齊驗收標準**，避免 evaluator 事後用浮動標準打槍
 - **長時任務的 force-continuation**：agent 很容易在任務沒做完時提早宣告完成。在 Stop hook 攔截「我已完成」訊號，對照原始 completion goal 檢查，沒達成就把它丟回 loop 繼續做。注意這是**進度**問題（事情沒做完），跟面向 5 的**正確性**問題（事情沒做對）不同——一個問「做完沒」，一個問「做對沒」
-- **Fork-Join 並行**：跨檔案互不依賴的改動可以拆分，每個子 agent 在獨立的程式碼副本（例如 `git worktree`）裡跑，互不干擾，等都完成後再合併
+- **Fork-Join 並行**：跨檔案互不依賴的改動可以拆分，每個子 agent 在獨立的程式碼副本（例如 `git worktree`）裡跑，互不干擾，等都完成後再合併——這條軸的拓樸決策（fan-out／fan-in／diamond／pipeline、barrier 何時該用、cycle 怎麼收斂）深潛見 [graph-engineering.md](./graph-engineering.md)
 
 代價是：多了協調成本，小任務會顯得「流程過重」，合併分支也可能比順序處理更難解。但對複雜、不熟悉的程式碼庫來說，這個取捨划算。
 
@@ -624,10 +625,12 @@ Claude Code 把「協調多步驟工作」做成四種 primitive，差別正好�
 - **「誰掌握計畫」＝硬化程度**：由左到右，協調從「模型逐輪即興（軟）」固化成「確定性腳本（硬）」——心法 4 的軟硬光譜，在這裡是一條可選的滑桿。
 - **「中間結果落點」是一句面向 1 的話**：workflow 把中間產物留在腳本變數、主 context 只收最終答案——這正是它能一次跑數十～數百 agent 而不爆 context 的原因（面向 1 offloading 開到極致）。
 - **workflow 內建面向 5**：它能讓獨立 agent 互相對抗性審查、多角度起草再權衡，等於把「生成／評估分離 ＋ 評分標準設計」做成可重播的腳本步驟。
-- **要 human-in-the-loop 就往左**：workflow 跑起來「無中途使用者輸入」；階段間要簽核，官方建議「把每個階段做成各自的 workflow」——即退回互動式那一端取一次人工 gate。
+- **要 human-in-the-loop 就往左**：workflow 跑起來「無中途使用者輸入」；階段間要簽核，官方建議「把每個階段做成各自的 workflow」——即退回互動式那一端取一次人工 gate。（**精確化**：這裡的「無輸入」指沒有**輸入型**的人工介入點；使用者仍可中途 skip 掉個別 agent，該 agent 的回傳值變成 `null`——能中斷，不能引導。見 [graph-engineering.md](./graph-engineering.md) §八 #6。）
 - **隔離是刻意設計，不是限制**：workflow agent 彼此不通訊，正是為了在構造上破解單一 context 的三種失敗模式——agentic laziness（偷懶）、self-preferential bias（自我偏袒）、goal drift（目標漂移）。team 反過來把「能即時溝通、重新協商介面」當賣點，代價是對自我偏袒沒有結構性防禦，要靠人為設角色（如專職 devil's advocate 隊員）補。
 
 > 來源：Claude Code《Dynamic workflows》文件（研究預覽，需 v2.1.154+；`/deep-research`、`ultracode` 觸發）。`ultracode` 會把一個請求自動拆成「理解 → 修改 → 驗證」一串 workflow——正是 harness 迴路（面向 4 ＋ 面向 5）被排成序列。
+
+> **與 graph engineering 的接縫**：本表管**選型**（要不要用 workflow）；選定之後「圖怎麼畫」——拓樸、barrier、verifier、收斂條件，以及對第一方工具契約的逐條校準——見 [graph-engineering.md](./graph-engineering.md)。
 
 #### 社群實戰校準（2026-03～06 的使用報告）
 
@@ -839,5 +842,10 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
   - 同段強制帶反向證據：62% vs 34% 兩份調查衝突且不可換算、廠商把 AI 輔助與監考綁同一 SKU、廠商自承預測效度未驗證；並修掉一個流傳中的誤讀——Pichai 恢復實體面試**沒有**歸因於 AI 作弊，Cisco 講的是 deepfake 假冒候選人而非 AI 輔助寫程式
   - 明列三個**查證後剔除**的數字（作弊盛行率、CoderPad 35,000+ 場、Gartner 72.4%），避免日後又被撿回來引用
   - **本次調查的觸發來源已判定不可用**：一則 X 貼文轉載匿名 Reddit 貼文，聲稱 OpenAI onsite 有 beta 的「Agentic Coding Round」。查證結果——OpenAI 官方面試指南無此內容、無具名第一手、無新聞佐證、原貼文與帳號查無，且整套說法逐字散佈於多個無署名的面試準備 SEO 站且彼此矛盾；唯一相關的第一方證據（2025-09 OpenAI 招募人員要候選人準備「無 autocomplete 與 debugger」的 CoderPad）方向相反。**不入庫、不引用**；真正的趨勢證據全部來自雇主與廠商的第一方文件，與該傳聞無關
+
+- **2026-08-02（同日補記二）**：面向 4 的拓樸決策拆為獨立筆記 [graph-engineering.md](./graph-engineering.md)
+  - §四 面向 4「Fork-Join 並行」：補指路，拓樸四型（fan-out／fan-in／diamond／pipeline）、barrier 判準、cycle 收斂條件移至該篇
+  - §六 四 primitive 表：「無中途使用者輸入」補一則**精確化**——使用者仍可 skip 個別 agent（該 agent 回傳 `null`），能中斷但不能引導；依據是該篇 §八 #6 對 v2.1.220 第一方 `Workflow` 工具契約的校準
+  - §六 表後補「選型 vs 畫圖」的分工指路（獨立 callout，不併進「來源：」引用塊）；frontmatter sources 同步
 
 下次 review 觸發點：Claude Code 主版本變動、出現新的有名 harness pattern、模型世代跨越（例如下一代 reasoning model 大規模可用）、招募端出現方法論可查的大樣本調查（可取代目前互相衝突的 62% vs 34%）。

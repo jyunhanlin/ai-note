@@ -409,6 +409,7 @@ ihower，「給 Agent 開發者的駕馭工程」系列（2026-06-26，演講書
 - [loop-engineering.md](./loop-engineering.md) — harness 上一層的自走 loop（心跳／跨 run 記憶／判停）＝本系列的時機④
 - [boris-cherny-tips.md](./boris-cherny-tips.md) — Boris Cherny 的 Claude Code loop primitive 實際用法（/loop、/schedule、/goal），與第 6 篇「把自己移出迴圈」同主題的使用者端筆記
 - [context-engineering.md](./context-engineering.md) — 第 8 篇過期性論證的 **context 層實例**（Anthropic 第一方，2026-07）；其 §四「能力假設 vs 偏好假設」是本系列「eval/judge 永不過期」那條分界線在指令端的對應
+- [graph-engineering.md](./graph-engineering.md) — §五 裁判獨立性光譜在多 agent workflow 上的對應：該篇 §五 5.3 把對抗式 verifier 定位在「結構獨立、模型不獨立、證據最少」那一格
 
 ### 校對紀錄
 
@@ -418,5 +419,7 @@ ihower，「給 Agent 開發者的駕馭工程」系列（2026-06-26，演講書
 - **2026-08-02（同日補記）**：§八 Bitter Lesson 收尾補一則**量測型元件**的過期案例——Anthropic 的效能工程 take-home 因 Claude 一路追上而歷經三個版本（Tristan Hume, 2026-01-21，第一方具名）。作用是**把「eval/judge 永不過期」切精確**而非推翻：角色不過期、題目會過期，且以模型版本號為單位。同時在 §八 末的對照引言加註：harness §七 的位移／淘汰／新生三條路是從**約束型**元件歸納的，套到量測型元件要換讀法（失去鑑別度 → 重寫，而非死重 → 刪除）。frontmatter sources 同步。
   - **回原文核對過並修掉自己一處錯誤**：草稿寫「改寫了三次」，但原文用的是 "three iterations"（三個版本，含初代），全文查無 "three times"，已改為「歷經三個版本」並附原文副標。同時新增一條範圍限定——模型追平的是**時限內**表現，原文明講不限時間時最佳人類仍勝過 Claude（他們因此把初代題目公開成 open challenge）；少了這句話，「eval 過期」很容易被引用成「人類已經輸了」。
   - 連帶影響已知但**未動**：§十一 內部連結第 4 條說 context-engineering.md §四 是「eval/judge 永不過期」在指令端的對應——該句仍成立（講的是角色那一側），但若日後要重寫該條，記得帶上這裡新增的「題目會過期」那一半。
+
+- **2026-08-02（同日補記二）**：§十一 內部連結新增 [graph-engineering.md](./graph-engineering.md)，標出對應——§五 的裁判獨立性光譜在多 agent workflow 上的落點：該篇 §五 5.3 把對抗式 verifier 歸在「結構獨立、模型不獨立、證據最少」那一格，並引用本系列 §三「換新 context 仍共享同一套訓練與失誤模式」當作「隔離只是必要條件」的依據。
 
 下次 review 觸發點：系列若有更新或勘誤、Claude Code /goal 與 Codex Goals 機制大改、本 repo harness 筆記重構時同步對照表。

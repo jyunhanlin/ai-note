@@ -11,6 +11,7 @@ sources:
   - Boris Cherny (@bcherny) — "my job is to write loops"
   - 本 repo：boris-cherny-tips.md（Claude Code loop primitive 實例）
   - 本 repo：harness-engineering.md（內層：單一 agent 的運行環境）
+  - 本 repo：graph-engineering.md（run 內的 cycle，對照本篇的跨 run loop）
 ---
 
 # Loop Engineering：從「親自 prompt agent」到「設計會自走的系統」
@@ -168,9 +169,11 @@ Addy 的論點之一是兩邊的零件形狀已經一樣。對照如下（互通
 
 - [harness-engineering.md](./harness-engineering.md) — 內層：單一 agent 的運行環境（五面向、四心法、Claude Code primitive mapping）
 - [boris-cherny-tips.md](./boris-cherny-tips.md) — Claude Code loop primitive 的實際用法與實例（`/loop`、`/schedule`、`/goal`、worktree、hooks）
+- [graph-engineering.md](./graph-engineering.md) — run **內**的 cycle（loop-until-dry，狀態在腳本變數）；本篇是跨 run 的 loop（狀態在磁碟）。判別法見該篇 §四 4.2
 
 ### 校對紀錄
 
 - **2026-06-14**：初版。依 Addy《Loop Engineering》(2026-06-09) 採「loop 在 harness 上一層」分層
   - 採「薄、委派型」結構：四塊複用元件連回 [harness-engineering.md](./harness-engineering.md)，只詳寫 loop 獨有的三塊（心跳 / 跨 run 記憶 / 判停）
   - 沿用 harness 筆記 §四「每元件獨佔一個問題」的紀律切分 loop 三塊
+- **2026-08-02**：§本 repo 內部連結與 frontmatter sources 新增 [graph-engineering.md](./graph-engineering.md)，標出分界——該篇的 cycle 在**單一 run 內**（狀態在腳本變數，收斂靠 `while` 條件），本篇的 loop 是**跨 run**（狀態在磁碟，靠心跳叫醒、`/goal` 判停）

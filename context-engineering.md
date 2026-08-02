@@ -278,10 +278,13 @@ Anthropic 出了 `/doctor` 幫忙瘦身——原文兩個名字都提了（CLI �
 - [loop-engineering.md](./loop-engineering.md) — harness 上一層的自走 loop
 - [boris-cherny-tips.md](./boris-cherny-tips.md) — Claude Code 實務技巧
 - [prompt.md](./prompt.md) — 單次請求的措辭技巧
+- [graph-engineering.md](./graph-engineering.md) — workflow 編排層把 context offloading 開到極致（本篇 §2.3 漸進揭露的另一端；offloading 本身在 harness 面向 1）
 
 ### 校對紀錄
 
 - **2026-08-02**：初版。依 Thariq 2026-07-25 長文整理，重編為「樞紐（成本科目變了）→ 六組差分 → 分層配置 → 判別法」骨架；重疊處採薄委派連回 harness 筆記。原文沒有、本篇自行加入並已就地標示的內容：§四「能力假設 vs 偏好假設」判別法（偏好那半為新增）、§2.1 的 Never/Always 掃描動作、§2.5 的自動記憶位置、§三 堆疊的具體程度排序、§四 `/doctor` 唯讀 vs 可修的區分、§六 本機驗證表。同批處理的交叉修補：harness §七 補第一方實證、ihower §八 補 context 層案例、prompt.md §Few-Shot 加射程註記、boris-cherny-tips §CLAUDE.md 加時效註記。
   - 發布前覆核修正：§五 5.4→**5.5**（誤用了 harness 已作廢的舊編號）；§七 原案例誤標為「社群」（實為 Anthropic 來源，只是沒給比例）；§2.2 原寫「原文沒說清楚射程」，**實際上原文把範圍限定在 tool 使用**，本篇往 prompt.md 與 evaluator 的外推已改標為未驗證；補回原文明講卻漏掉的 CLAUDE.md 兩條（保持輕量＋簡述 repo 用途、verification skill 模式）；移除「原文叫你把偏好寫得更明確」這個原文沒有的說法。`/checkup` 查證後確認是 `/doctor` 的**別名**（非已移除）；auto-memory 的專案數原誤植，已改為不寫死數字。
+
+- **2026-08-02（同日補記）**：§本 repo 內部連結新增 [graph-engineering.md](./graph-engineering.md)，標出分界——該篇談 workflow 編排層把 context offloading 開到極致（subagent 各自扛 context、主 context 只收結論），是本篇 §2.3 漸進揭露的另一端；**offloading 本身仍在 harness 面向 1**，本篇維持不重複的立場（§2.3 末的那則宣告不變）。
 
 下次 review 觸發點：下一代模型發布（本篇的差分會再翻一次）、`/doctor` 行為變動、Anthropic 公布更細的 context engineering 指南、§2.2 few-shot 射程有人做出實測、harness 面向 1／5.1 的 CLAUDE.md 描述更新（§五 最後一列的未解衝突）。
