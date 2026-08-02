@@ -11,6 +11,7 @@ sources:
   - 本 repo：harness-engineering.md（使用者視角：單一 agent 運行環境的五面向）
   - 本 repo：loop-engineering.md（harness 上一層的自走 loop）
   - 本 repo：context-engineering.md（§八 過期性論證的 context 層實例，源自 Thariq 2026-07-25）
+  - Anthropic / Tristan Hume — "Designing AI-resistant technical evaluations"（2026-01-21）— §八 量測型元件過期的第一方案例（本 repo 補）
 ---
 
 # 駕馭工程：給 Agent 開發者的 Harness Engineering（ihower 系列）
@@ -323,8 +324,12 @@ Anthropic 官方的 ralph-wiggum plugin 與原版 Ralph **機制相反**：plugi
 
 - ⏳ **會過期**：各種具體 harness 做法與補強措施。Bitter Lesson 在這裡不是叫你別設計 harness，而是「別把今天這個模型的限制，寫成永遠不動的架構」——設計得精簡、易替換、易量測，模型變強才拆得掉。「想待在前沿，你得在每次新模型發布時，刪掉你大半的程式碼。」（nicbstme）
 - ♾️ **不會過期**：定義「什麼叫做好」、驗證真的做到了——**Eval 和 Judge**。第 3 篇工具層檢查、第 5 篇停止條件與 grader、第 6 篇 loop 判停、第 7 篇自我改進核心，全是同一件事的不同粒度。就算模型強到能完美自我驗證，它驗證的仍是「由你定義的目標」——模型會一代代吸收腳手架，吸收不了替它定義成功並驗證成功的角色。
+- ⚠️ **但「不會過期」指的是角色，不是題目（2026-01 案例，本 repo 補）**：Anthropic 的 Tristan Hume（效能最佳化團隊）揭露他們的效能工程 take-home **歷經三個版本**（原文副標：「what we learned from three iterations of a performance engineering take-home that **Claude keeps beating**」）——同樣時限下，Claude Opus 4「表現勝過多數人類申請者」但還分得出最強的一群；到 **Opus 4.5 連那群人也追平了**。最新版只好換成刻意 out-of-distribution 的「指令最小化」謎題（Zachtronics 風格），才重新拉開差距。這不牴觸上一條，而是把它切乾淨：**定義成功的角色不會過期，但承載那個定義的那份題目會，而且是以模型版本號為單位在過期。** 反過來讀，正因為題目一直在失效，重新出題的那個角色才更難被取代。
+  - ⚠️ 這句話很容易被過度引用，先釘死範圍：模型追平的是**時限內**的表現。原文明講**不限時間時最佳人類仍勝過 Claude**，所以他們把初代題目公開成 open challenge。所以「eval 會過期」過期的是**該施測條件下的鑑別度**，不是「人類已經輸了」。
+  - 這是過期性論證在**量測型元件**上的變體，失效方式跟前面幾例不同：約束型元件（hook、sprint 結構、todo 清單）過期的樣子是**變成死重**，處置是刪掉；量測型元件（eval、rubric、take-home）過期的樣子是**失去鑑別度**，處置只能是重寫。§七「eval 是 agent 的訓練資料」因此要補一個前提——**那份訓練資料本身有保鮮期**。
+  - 附帶一提，這份 take-home 也是 Anthropic 唯一明講可以用 AI 的關卡，理由正是「較長 horizon 的問題對 AI 而言較難完全解出」——等於把「題目的鑑別度來自 horizon 長度」寫成了操作準則。來源：[Designing AI-resistant technical evaluations](https://www.anthropic.com/engineering/AI-resistant-technical-evaluations)（Tristan Hume, 2026-01-21）。
 
-> 對照 [harness-engineering.md](./harness-engineering.md) §七「Harnesses Don't Shrink, They Move」：兩邊結論一致（位移／淘汰／新生三條路、每個元件編碼一個能力假設），ihower 多給了「四層拆解＋內層留原廠」的操作守則和「eval/judge 永不過期」的分界線。
+> 對照 [harness-engineering.md](./harness-engineering.md) §七「Harnesses Don't Shrink, They Move」：兩邊結論一致（位移／淘汰／新生三條路、每個元件編碼一個能力假設），ihower 多給了「四層拆解＋內層留原廠」的操作守則和「eval/judge 永不過期」的分界線。⚠️ 但那三條路是從**約束型**元件歸納的；上面的 take-home 案例顯示**量測型**元件要換一種讀法（失去鑑別度 → 重寫，而非死重 → 刪除）。
 
 ---
 
@@ -410,5 +415,8 @@ ihower，「給 Agent 開發者的駕馭工程」系列（2026-06-26，演講書
 - **2026-07-07**：初版。9 篇逐篇萃取後按系列自身骨架（六能力 → 定義與四時機 → 自我改進 → 過期性 → 選型）整理；重疊內容採「薄、委派型」紀律連回 harness-engineering.md 與 loop-engineering.md；§十 補視角對照表與「success is silent vs 成功也要設計」的調和。
   - 發布前 9 篇逐篇覆核，修正：Ralph 的「編譯器專案」與「$297 MVP」二事分開（原誤併為一件）、skillify 10 步清單歸屬改回 Garry Tan、Claude Agent SDK 移除原文沒有的「能力最齊」、boris-cherny-tips 指向改為 /loop 排程用法（該檔並無 259 PR 實例）技術細節注意：Claude Code /goal 的 Haiku／刪減 transcript 等內部機制是 ihower 用 mitmproxy 攔包的觀察（非官方文件，可能隨版本改動）；「OpenAI 把自我審計練進模型」是作者標明的合理推測。
 - **2026-08-02**：§八 補一則後續案例——Anthropic 砍 Claude Code 系統提示詞 80%（Thariq, 2026-07-25），作為過期性論證的 **context 層**版本（前兩例都在 workflow 層）；§十 對照表與 §十一 內部連結新增 [context-engineering.md](./context-engineering.md)，標出它 §四 與本系列「eval/judge 永不過期」的對應關係；frontmatter sources 同步。ihower 系列本身的萃取內容未動，§八 只追加一則標記為「本 repo 補」的後續案例。
+- **2026-08-02（同日補記）**：§八 Bitter Lesson 收尾補一則**量測型元件**的過期案例——Anthropic 的效能工程 take-home 因 Claude 一路追上而歷經三個版本（Tristan Hume, 2026-01-21，第一方具名）。作用是**把「eval/judge 永不過期」切精確**而非推翻：角色不過期、題目會過期，且以模型版本號為單位。同時在 §八 末的對照引言加註：harness §七 的位移／淘汰／新生三條路是從**約束型**元件歸納的，套到量測型元件要換讀法（失去鑑別度 → 重寫，而非死重 → 刪除）。frontmatter sources 同步。
+  - **回原文核對過並修掉自己一處錯誤**：草稿寫「改寫了三次」，但原文用的是 "three iterations"（三個版本，含初代），全文查無 "three times"，已改為「歷經三個版本」並附原文副標。同時新增一條範圍限定——模型追平的是**時限內**表現，原文明講不限時間時最佳人類仍勝過 Claude（他們因此把初代題目公開成 open challenge）；少了這句話，「eval 過期」很容易被引用成「人類已經輸了」。
+  - 連帶影響已知但**未動**：§十一 內部連結第 4 條說 context-engineering.md §四 是「eval/judge 永不過期」在指令端的對應——該句仍成立（講的是角色那一側），但若日後要重寫該條，記得帶上這裡新增的「題目會過期」那一半。
 
 下次 review 觸發點：系列若有更新或勘誤、Claude Code /goal 與 Codex Goals 機制大改、本 repo harness 筆記重構時同步對照表。
