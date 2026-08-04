@@ -12,6 +12,7 @@ sources:
   - 本 repo：boris-cherny-tips.md（Claude Code loop primitive 實例）
   - 本 repo：harness-engineering.md（內層：單一 agent 的運行環境）
   - 本 repo：graph-engineering.md（run 內的 cycle，對照本篇的跨 run loop）
+  - 本 repo：eval-engineering.md（判停的下一層：判官準不準；§六 補 shadow mode 與分歧率基準）
 ---
 
 # Loop Engineering：從「親自 prompt agent」到「設計會自走的系統」
@@ -170,6 +171,7 @@ Addy 的論點之一是兩邊的零件形狀已經一樣。對照如下（互通
 - [harness-engineering.md](./harness-engineering.md) — 內層：單一 agent 的運行環境（五面向、四心法、Claude Code primitive mapping）
 - [boris-cherny-tips.md](./boris-cherny-tips.md) — Claude Code loop primitive 的實際用法與實例（`/loop`、`/schedule`、`/goal`、worktree、hooks）
 - [graph-engineering.md](./graph-engineering.md) — run **內**的 cycle（loop-until-dry，狀態在腳本變數）；本篇是跨 run 的 loop（狀態在磁碟）。判別法見該篇 §四 4.2
+- [eval-engineering.md](./eval-engineering.md) — §2.3 判停「何時算完成」的下一層：判它的那個判官準不準（§一）、以及 §四「無人看管地跑 ＝ 無人看管地犯錯」缺的具體機制——shadow mode ＋ 閘門與人類的分歧率追蹤（§六）
 
 ### 校對紀錄
 
@@ -177,3 +179,4 @@ Addy 的論點之一是兩邊的零件形狀已經一樣。對照如下（互通
   - 採「薄、委派型」結構：四塊複用元件連回 [harness-engineering.md](./harness-engineering.md)，只詳寫 loop 獨有的三塊（心跳 / 跨 run 記憶 / 判停）
   - 沿用 harness 筆記 §四「每元件獨佔一個問題」的紀律切分 loop 三塊
 - **2026-08-02**：§本 repo 內部連結與 frontmatter sources 新增 [graph-engineering.md](./graph-engineering.md)，標出分界——該篇的 cycle 在**單一 run 內**（狀態在腳本變數，收斂靠 `while` 條件），本篇的 loop 是**跨 run**（狀態在磁碟，靠心跳叫醒、`/goal` 判停）
+- **2026-08-04**：§本 repo 內部連結新增 [eval-engineering.md](./eval-engineering.md)。接點有二：§2.3 判停問「何時算完成」，該篇 §一 問「判它的那個判官準不準」；§四 說「無人看管地跑的 loop 也是無人看管地犯錯的 loop」但沒給機制，該篇 §六 補上——shadow mode（閘門評分但不合併）＋ 追蹤閘門與人類 reviewer 的分歧率。本篇內容未動

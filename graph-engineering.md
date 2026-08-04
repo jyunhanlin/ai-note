@@ -12,6 +12,7 @@ sources:
   - 本 repo：loop-engineering.md（跨 run 的 loop，對照本篇 run 內的 cycle）
   - 本 repo：ihower-harness-engineering.md（§五 裁判獨立性光譜）
   - 本 repo：context-engineering.md（§2.3 漸進揭露／deferred tool loading）
+  - 本 repo：eval-engineering.md（harness 面向 5 的深潛；判官家族偏誤是 §五 5.3 的計量佐證）
 ---
 
 # Graph Engineering：把線性 agent 攤成圖
@@ -504,6 +505,7 @@ workflow 把**結構**那一半做成構造性的：subagent 彼此不通訊、�
 | 裁判獨立性                  | §五 5.3：結構獨立、模型不獨立      | [ihower-harness-engineering.md](./ihower-harness-engineering.md) §五 光譜（單輪驗收版，結論是取捨非排名）＋ harness §四 面向 5「分離是必要、不是充分」                                                                                                   |
 | 為什麼能開幾百個 agent 不爆 | §三 3.1 末段                       | [harness-engineering.md](./harness-engineering.md) §四 面向 1 tool-call offloading ＋ §六「中間結果落點」。[context-engineering.md](./context-engineering.md) §2.3 只補 deferred tool loading，**offloading 那半它明講不重複**                           |
 | 成本實感                    | §五 5.1 價錢欄、§六 6.2            | [harness-engineering.md](./harness-engineering.md) §六：workflow 單一重任務可吃掉 Max plan 約 20% session 限額；中小任務用 workflow 是純浪費                                                                                                             |
+| 裁判本身準不準              | §五 5.1 只要求「prompt 偏向反駁」  | [eval-engineering.md](./eval-engineering.md) §一：判官的**家族偏誤**是正交的第二條軸。它替本篇 **§五 5.3**「裁判是動 `model` 的唯一例外」補上計量證據；它建議的跨廠商 judge panel 要連同 §五 5.2 的 quorum 陷阱一起讀（注意本篇把 judge panel 歸為選拔而非 gate，該篇是拿它當 gate 用） |
 
 ---
 
@@ -544,11 +546,14 @@ workflow 把**結構**那一半做成構造性的：subagent 彼此不通訊、�
 - [loop-engineering.md](./loop-engineering.md) — 跨 run 的 loop
 - [ihower-harness-engineering.md](./ihower-harness-engineering.md) — 開發者視角的 harness
 - [context-engineering.md](./context-engineering.md) — Claude 5 世代的 context 規則
+- [eval-engineering.md](./eval-engineering.md) — harness §四 面向 5 的深潛，與本篇對稱。本篇的 verifier 在**單次 run 內**逐 finding 驗，該篇在**跨 run 與合併點**驗；§一 的判官家族偏誤是本篇 §五 5.3「獨立性只買到一半」的計量佐證。該篇 §1.4 規則 3 也指回本篇 §五 開場的「能用 code 做 gate 就別用 agent」
 
 ### 校對紀錄
 
 - **2026-08-02**：初版。依 Codez 14 步骨架按「解決的問題」重新分組成七章，§八 以本機 v2.1.220 第一方契約逐條校準（6 條修正、10 條原文未提事項），§五 5.2 的 quorum 陷阱與 §五 5.3 的獨立性上限為本篇自補，兩者原文與契約皆無
   - 同時補上四篇既有筆記的反向連結（harness §四 面向 4／§六、loop、context、ihower 的內部連結區）
   - §八 #6 對 harness §六「無中途使用者輸入」提出精確化，已在該檔 §六 標註
+
+- **2026-08-04**：§九 對照表與 §十 內部連結新增 [eval-engineering.md](./eval-engineering.md)（harness §四 面向 5 的深潛，與本篇對稱）。標出的接點：該篇 §一 的判官家族偏誤替本篇 **§五 5.3**「裁判是動 `model` 的唯一例外」補上計量證據（本篇原有的理由是結構性的——注意原句在 5.3，§六 6.2 只是指過去）；該篇建議的跨廠商 judge panel 要連同本篇 §五 5.2 的 quorum 陷阱一起讀，但**兩處的 judge panel 不同義**（本篇歸為選拔、非 gate），且 5.2 的浮動成因是 verifier 掛掉變 `null`，不是票數變多。本篇內容未動
 
 下次 review 觸發點：Workflow 脫離研究預覽、`ultracode`／`effort` 選項變動、併發或 agent 數上限調整、Codez 原文更新或勘誤、harness §六 四 primitive 表重寫。

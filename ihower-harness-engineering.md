@@ -12,6 +12,7 @@ sources:
   - 本 repo：loop-engineering.md（harness 上一層的自走 loop）
   - 本 repo：context-engineering.md（§八 過期性論證的 context 層實例，源自 Thariq 2026-07-25）
   - Anthropic / Tristan Hume — "Designing AI-resistant technical evaluations"（2026-01-21）— §八 量測型元件過期的第一方案例（本 repo 補）
+  - 本 repo：eval-engineering.md（§五 裁判獨立性的正交軸；第 7 篇 `agent = fit(model, harness, evals)` 裡 `evals` 的展開）
 ---
 
 # 駕馭工程：給 Agent 開發者的 Harness Engineering（ihower 系列）
@@ -378,6 +379,8 @@ Anthropic 官方的 ralph-wiggum plugin 與原版 Ralph **機制相反**：plugi
 | 會過期 vs 不會過期（eval/judge 那條線） | [context-engineering.md](./context-engineering.md) §四（能力假設／偏好假設） | 同一條線的兩端：ihower 從驗證講（模型吸收不了「定義成功」），該篇從指令講（模型猜不到「你要什麼」） |
 | 六項內建能力                            | harness 筆記 面向 1–4 的 primitives                                   | 視角差：開發者的「選配清單」vs 使用者的「治理面向」                    |
 | 裁判獨立性光譜（自審/transcript/grader）| harness 筆記 §五 5.5 evaluator 設計、面向 5 生成/評估分離             | ihower 用三個真實產品把「分離」量成一條可調的光譜＋成本模型            |
+| 裁判獨立性光譜（**另一條軸**）          | [eval-engineering.md](./eval-engineering.md) §一                      | **正交，不重複**：ihower 問「裁判**結構上**多獨立」，該篇問「**判官本身準不準**」（家族偏誤、verbosity bias）。兩軸合起來才是「這個判官能不能信」 |
+| `agent = fit(model, harness, evals)`    | [eval-engineering.md](./eval-engineering.md) 整篇                     | 該篇供應 `evals` 這一項——第 7 篇假設你有固定評測集，它談那組評測集本身怎麼來、怎麼不腐爛 |
 
 一個表面矛盾值得記下：harness 筆記心法 3 說「**success is silent**」（檢查通過就靜默），ihower 卻說「**成功也要設計**、回完整狀態」。不衝突——講的是兩個東西：前者是**外掛的檢查器**（hook/sensor）通過時別回「OK」雜訊稀釋失敗訊號；後者是**工具本身的回傳值**要有足夠資訊量讓 agent 判斷假完成。兩條合起來是同一個目標：管理 context 的訊噪比——雜訊靜默、訊號完整。
 
@@ -410,6 +413,7 @@ ihower，「給 Agent 開發者的駕馭工程」系列（2026-06-26，演講書
 - [boris-cherny-tips.md](./boris-cherny-tips.md) — Boris Cherny 的 Claude Code loop primitive 實際用法（/loop、/schedule、/goal），與第 6 篇「把自己移出迴圈」同主題的使用者端筆記
 - [context-engineering.md](./context-engineering.md) — 第 8 篇過期性論證的 **context 層實例**（Anthropic 第一方，2026-07）；其 §四「能力假設 vs 偏好假設」是本系列「eval/judge 永不過期」那條分界線在指令端的對應
 - [graph-engineering.md](./graph-engineering.md) — §五 裁判獨立性光譜在多 agent workflow 上的對應：該篇 §五 5.3 把對抗式 verifier 定位在「結構獨立、模型不獨立、證據最少」那一格
+- [eval-engineering.md](./eval-engineering.md) — §五 裁判獨立性的**正交軸**（判官本身的計量偏誤），以及第 7 篇 `agent = fit(model, harness, evals)` 裡 `evals` 那一項的展開。該篇 §五 明記本系列的 Goodhart 案例（Langfuse 刪核准關卡）比它自己的版本更好，只補「judge 版本漂移」這個七條件未單列的失效模式
 
 ### 校對紀錄
 
@@ -421,5 +425,8 @@ ihower，「給 Agent 開發者的駕馭工程」系列（2026-06-26，演講書
   - 連帶影響已知但**未動**：§十一 內部連結第 4 條說 context-engineering.md §四 是「eval/judge 永不過期」在指令端的對應——該句仍成立（講的是角色那一側），但若日後要重寫該條，記得帶上這裡新增的「題目會過期」那一半。
 
 - **2026-08-02（同日補記二）**：§十一 內部連結新增 [graph-engineering.md](./graph-engineering.md)，標出對應——§五 的裁判獨立性光譜在多 agent workflow 上的落點：該篇 §五 5.3 把對抗式 verifier 歸在「結構獨立、模型不獨立、證據最少」那一格，並引用本系列 §三「換新 context 仍共享同一套訓練與失誤模式」當作「隔離只是必要條件」的依據。
+
+- **2026-08-04**：§十 對照表新增兩列、§十一 內部連結新增 [eval-engineering.md](./eval-engineering.md)。標出的關係是**正交而非重複**——本系列 §五 的裁判獨立性光譜問「裁判**結構上**多獨立」（誰判、看得到什麼證據），該篇 §一 問「**判官本身準不準**」（家族偏誤、verbosity bias），兩軸合起來才是「這個判官能不能信」。另一列標出第 7 篇 `agent = fit(model, harness, evals)` 裡的 `evals` 由該篇供應：本系列假設你有固定評測集，該篇談那組評測集怎麼來、怎麼不腐爛。本系列萃取內容未動
+  - 該篇明記本系列的 Goodhart 案例（Langfuse 的 agent 為刷分刪掉人工核准關卡）**比它自己的版本更好**，只補「judge 自己升版導致前後分數不可比」這個第 7 篇七條件裡未單列的失效模式（那邊列的是「版本化的 prompt/工具/schema」，判官自身版本不在其中）
 
 下次 review 觸發點：系列若有更新或勘誤、Claude Code /goal 與 Codex Goals 機制大改、本 repo harness 筆記重構時同步對照表。

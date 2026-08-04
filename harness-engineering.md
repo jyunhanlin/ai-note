@@ -14,6 +14,7 @@ sources:
   - Anthropic — 自主多 agent pipeline 實證案例（Opus 4.5→4.6：sprint / evaluator / 評分標準設計）
   - Anthropic — Claude Code《Dynamic workflows》文件（多 agent 確定性編排 primitive）
   - 本 repo：graph-engineering.md（面向 4 的拓樸深潛；v2.1.220 Workflow 工具契約校準）
+  - 本 repo：eval-engineering.md（面向 5 的深潛：判官家族偏誤、版本漂移、blast radius 放行閘門）
   - Birgitta Böckeler — "Harness engineering for coding agent users"（feedforward/feedback controls 切法）
   - 社群實戰報告 — agent teams / dynamic workflows 使用心得（Heeki Park、Michael Habib、Rally 等，2026-03～06）
   - Thariq（Anthropic）— "The new rules of context engineering for Claude 5 models"（2026-07-25）— §七 第一方實證；完整整理另見 context-engineering.md
@@ -393,6 +394,8 @@ Agent 能持續做事，不是因為它一直「想」，而是因為它不斷�
 - **回顧分析**：定期跑 batch 分析過去 N 天的 session，找重複失敗模式、找 token 浪費熱點、找 sub-agent 編排是否合理
 
 **為什麼和 5a 同屬一個面向、卻又分子層？** 兩者都在回答「怎麼知道」，但使用者不同：5a 服務 agent（讓它即時自我修正），5b 服務 operator（讓人理解與調校）。前四個面向優化模型的執行環境，5b 優化**工程師對 agent 的理解**——沒有它，前面所有改善都是黑箱中的盲目調整。
+
+> **深潛：[eval-engineering.md](./eval-engineering.md)。** 本面向到「怎麼知道做對了」為止，並**假設你手上已經有一個驗證器**。那篇問下一層的問題——**你用來知道的那個東西，本身可不可信**（判官的家族偏誤與版本漂移）、以及**什麼時候可以憑它放手**（按 blast radius 分車道的放行閘門）。與 §四 面向 4 → [graph-engineering.md](./graph-engineering.md) 是同一種深潛關係：面向要照顧五面向的平衡，塞不下這些決策，而它們恰好是實際跑起來最會痛的地方。
 
 ---
 
@@ -847,5 +850,10 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
   - §四 面向 4「Fork-Join 並行」：補指路，拓樸四型（fan-out／fan-in／diamond／pipeline）、barrier 判準、cycle 收斂條件移至該篇
   - §六 四 primitive 表：「無中途使用者輸入」補一則**精確化**——使用者仍可 skip 個別 agent（該 agent 回傳 `null`），能中斷但不能引導；依據是該篇 §八 #6 對 v2.1.220 第一方 `Workflow` 工具契約的校準
   - §六 表後補「選型 vs 畫圖」的分工指路（獨立 callout，不併進「來源：」引用塊）；frontmatter sources 同步
+
+- **2026-08-04**：新增 [eval-engineering.md](./eval-engineering.md)，定位為面向 5 的深潛（與面向 4 → graph 同型）。**本檔內容未移除、未改寫，只在 §四 面向 5 末補一則指路**
+  - 指路內容：本面向到「怎麼知道做對了」為止並假設驗證器已存在；「那個驗證器本身可不可信」（判官家族偏誤、版本漂移）與「什麼時候可以憑它放手」（blast radius 車道）由該篇接手
+  - 該篇 §1.4 替本筆記 §三 心法 4（軟硬約束光譜）補了一個驗證層的應用實例：能用程式客觀檢查的就別交給判官——判官偏誤是要花錢買獨立性才能緩解的問題，能用 `exit 0` 判的事根本不需要進到那個問題裡
+  - 該篇 §六 明記自己已走出 harness 邊界（放行是組織決策，不是 harness 元件），本筆記五面向的射程不變
 
 下次 review 觸發點：Claude Code 主版本變動、出現新的有名 harness pattern、模型世代跨越（例如下一代 reasoning model 大規模可用）、招募端出現方法論可查的大樣本調查（可取代目前互相衝突的 62% vs 34%）。
