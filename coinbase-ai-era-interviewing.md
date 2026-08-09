@@ -2,7 +2,7 @@
 title: Coinbase：AI 時代的工程師面試（重建一年的逐章教學）
 tags: [hiring, interview, eval, ai-fluency, eval-expiry, judgment, ai-engineering]
 created: 2026-08-08
-last_reviewed: 2026-08-08
+last_reviewed: 2026-08-09
 type: reference
 status: living-document
 sources:
@@ -544,7 +544,8 @@ repo 裡既有的兩個過期案例（[ihower §八](./ihower-harness-engineerin
 | 宣稱 | 保留 |
 | --- | --- |
 | **5.7% → >50% AI 生成** | ⚠️ 沒有定義「AI-generated」的判定方式。是整個 PR 算？逐行算？有 AI 參與就算？不同定義能讓同一批資料在 20%～80% 之間跳。無外部審計 |
-| **~100% human-reviewed，且未犧牲品質與合規** | ⚠️「未犧牲品質」沒有給任何品質指標（事故率？回滾率？缺陷密度？）。這是一句主張，不是一個量測 |
+| **TL;DR 的「nearly all of our new code is AI generated」** | ⚠️ **與本文自己的數字矛盾**。本文寫的是「首次跨過 50%」，但 TL;DR 與 [§1.5](#15-那個逼出整篇文章的問題) 那個逼出全文的問句都寫成「幾乎全部」。「剛過一半」和「幾乎全部」差很遠，而全篇最有力的那個修辭前提靠的正是後者。**同一篇文章裡，摘要的數字可以不是本文的數字**——引用前一律回本文查 |
+| **~100% human-reviewed，且未犧牲品質與合規** | ⚠️「未犧牲品質」沒有給任何品質指標（事故率？回滾率？缺陷密度？）。這是一句主張，不是一個量測。另外原句 "humans still review **all** of our code, that share has reached **roughly 100%**" 內部彆扭——`all` 與 `roughly 100%` 不會同時成立 |
 | **84% 輪次相關性** | ⚠️ 沒說是哪兩輪、樣本多大、用什麼相關係數。方法可抄，數字別引 |
 | **面試官效率有可量測的提升** | ⚠️ **完全沒有數字**。「可量測」在這裡是形容詞不是證據 |
 | **新評估通過者 onsite 推進率明顯較高** | ⚠️ 原文自承樣本小。且見 [§5.6](#56-早期成效訊號以及它證明了什麼沒證明什麼)——它證明的是階段間一致性，不是預測效度。另外因為改動是整包上的（原文 [§7.3](#73-接下來要做什麼v2) 自承還沒 A/B），無法歸因到任何單一改動 |
@@ -621,4 +622,8 @@ repo 裡既有的兩個過期案例（[ihower §八](./ihower-harness-engineerin
 
 ### 更新紀錄
 
+- **2026-08-09**：[§十](#十舉證等級與可疑處)「引用時必須帶保留的」補兩條，來源是為 [逐段版](./coinbase-ai-era-interviewing-walkthrough.md) 重讀原文全文時發現的：
+  - **TL;DR 的「nearly all」與本文的「跨過 50%」矛盾**，且該問句在 [§1.5](#15-那個逼出整篇文章的問題) 又用回「幾乎全部」——初版漏抓
+  - `humans still review all of our code` 與 `roughly 100%` 內部不一致
+  - 同時確認：[§5.2](#52-各階段的改動原文以圖片表格呈現) 圖片表格轉錄與原圖逐格相符（末列 "executive offer approvals" 精確說是**高階主管層**）；[§4.2](#42-題型長什麼樣) 對 rollback 的教學推論**其實原文有據**——原文描述 senior 工作性質時直接列出 "judgment calls about tradeoffs, rollback risk, and system boundaries"
 - **2026-08-08**：初版。逐章教學，並在三處與 repo 既有論證接線（ihower §八 過期性、eval §二 判決要能改變 run、eval §5.2 Goodhart）。原文數字全部標註舉證等級；本 repo 補充的推論與評註（[§4.3](#43-怎麼自己造一份-repo-based-題) 造題方法、[§7.2](#72-面試表現能不能預測工作表現goodhart-風險) Goodhart 風險、[§十](#十舉證等級與可疑處) 六項未討論議題）均已標記為非原文
