@@ -118,6 +118,7 @@
 
 - **Opus 5 是目前最難被 prompt injection（提示注入）攻擊的模型**。Boris 表示，比起各項評測分數，最讓他興奮的是這點——這在系統卡（system card）中被埋得較深，但橫跨 PI evals 與 red teaming，Opus 5 都很難被成功注入。Opus 5 同時也是很強的編碼、資料分析、設計、生物與知識工作模型。（[來源](https://www.threads.com/@boris_cherny/post/DbL0xw8kSZG)）
 - **疊加多層防護可將注入攻擊成功率降到接近 0**：結合「強化的模型對齊（strong model alignment）」＋「prompt injection 探針（probes）」＋「Claude Code 的 Auto Mode」三層防護後，prompt injection 攻擊的成功率會降到 ~0。實務含意——在 Claude Code 中開啟 **Auto Mode** 並搭配 Opus 5，即可取得目前最佳的注入攻擊防護。（[來源](https://www.threads.com/@boris_cherny/post/DbL0yg7kaqW)）
+- **Auto Mode 成為 Claude Code 的預設值**（2026 年 8 月分享）：Boris 表示，只要疊加足夠多層防護——**模型訓練層對齊 ＋ 輸入端探針（input probes）＋ 一個檢查意圖的分類器（classifier）**——就能把針對「未見過的攻擊」的間接 prompt injection 成功率壓到 ~0，「一年前沒料到能做到」。同時他宣布 **Auto Mode 從下週起（自該貼文起算）成為 Claude Code 的預設值**，使用者不必再手動開啟。（[來源](https://www.threads.com/@boris_cherny/post/DbwZrOkkfnF)｜[部落格](https://claude.com/blog/auto-mode-default-in-claude-code)）
 
 ### 努力程度控制（Effort Levels）
 
@@ -130,6 +131,18 @@
 - `/loop`：在本地執行週期性任務，最長可達三天。Boris 實際運行的排程範例：每 5 分鐘處理一次 code review、每 30 分鐘推送 Slack 反饋、每小時清理過期 PR。
 - `/schedule`：設定在機器關閉後仍能持續執行的雲端工作。
 - **`/goal`**（2026 年 5 月新增）：為任務設定目標條件，讓 Claude 自動執行直到達成。底層機制等同於 `/loop until <條件>`——有人在 Threads 問 Boris 能否新增 `/goal` 功能，他回覆「用 `/loop until` 就行了」，隨後 Claude Code 2.1.139 於 18 小時內正式推出 `/goal` 指令。（[來源](https://www.threads.com/@aabyzov/post/DYOc5I1CDvH/may-boris-cherny-at-anthropic-gets-asked-about-goal-for-claude-code-replies)）
+
+### 用 Claude 自動維護 App（每日 routines，2026 年 8 月分享）
+
+- Boris 分享了一個實驗：讓 Claude **接管 App 的日常維護**，並看到「初步的可行跡象（early signs of life）」。做法很單純——建立一個名為 `proj-claude-maintains-apps` 的 Slack 頻道，讓 **Claude Tag** 在其中跨 **iOS、Android、Desktop、web、CLI、Agent SDK** 執行一系列**每日 routines**。（[來源](https://www.threads.com/@boris_cherny/post/Db_tGXFEZw3)）
+- 實際運行的 routine 範例：
+  - **Crash fuzzer**：在模擬器中開啟 App、四處亂點找出會 crash 的操作，接著找出根因並修復。
+  - **Dup unifier**：掃描 codebase 中「相似但略有分歧」的抽象，提出 PR 將它們統一。
+  - **Dead-code remover**：移除靜態上不可達的程式碼；對疑似死碼先加上 logging，隔天確認真的沒被執行後再移除。
+  - **Abstraction police**：修復有破綻的抽象（leaky abstractions）。
+  - 以及更多其他 routine。（[來源](https://www.threads.com/@boris_cherny/post/Db_tG_4kY2U)）
+- 成效出乎意料地好：過去幾週這些 routines 共開了 **388 個 PR**，其中 **180 個**在經過 **Claude Code Review ＋ 人工審查**後被合併。Claude 通常一次（first shot）就能把 PR 做對；若沒做對，就請 Claude **調整它自己的 routine**，讓它隔天表現更好（有時需要幾天的微調）。團隊正在思考如何讓這類機械式變更更容易被合併。（[來源](https://www.threads.com/@boris_cherny/post/Db_tIKMke2z)）
+- 想嘗試類似工作流程：直接請 **Claude Code 或 Claude Tag** 幫你設定，或到 **[claude.ai/code/routines](https://claude.ai/code/routines)** 直接建立 routine。（[來源](https://www.threads.com/@boris_cherny/post/Db_tIoQEegk)）
 
 ### 跨裝置與遠端控制（2026 年 3 月分享）
 
