@@ -144,6 +144,17 @@
 - 成效出乎意料地好：過去幾週這些 routines 共開了 **388 個 PR**，其中 **180 個**在經過 **Claude Code Review ＋ 人工審查**後被合併。Claude 通常一次（first shot）就能把 PR 做對；若沒做對，就請 Claude **調整它自己的 routine**，讓它隔天表現更好（有時需要幾天的微調）。團隊正在思考如何讓這類機械式變更更容易被合併。（[來源](https://www.threads.com/@boris_cherny/post/Db_tIKMke2z)）
 - 想嘗試類似工作流程：直接請 **Claude Code 或 Claude Tag** 幫你設定，或到 **[claude.ai/code/routines](https://claude.ai/code/routines)** 直接建立 routine。（[來源](https://www.threads.com/@boris_cherny/post/Db_tIoQEegk)）
 
+### Fable 5.1（2026 年 9 月發布）
+
+- **Fable 5.1 是目前最好的模型**，涵蓋編碼、資料分析、computer use、設計、簡報、Claude Tag，以及「最困難的長時間 agentic 工作」。Boris 表示這個模型用起來很愉快，他自己「什麼都用它」——實務含意：Claude Code 的預設選擇可直接換成 Fable 5.1。（[來源](https://www.threads.com/@boris_cherny/post/DcwXxTEmkWX)）
+- **成本大幅下降**：Enterprise、API、SDK 客戶降價；Fable 5.1 的 **cache read 從每百萬 token 1 美元降到 0.25 美元**，換算下來「典型的 Claude Code session 最多便宜 38%」。長 session、重度使用 prompt caching 的工作流程受益最大。（[來源](https://www.threads.com/@boris_cherny/post/DcwXx3yGg-v)）
+- **誤攔（false positive）大幅減少**：最新的生物領域防護在良性請求上的介入次數比 Fable 5 少 **85%**；**Claude Code 使用者每個 session 的資安（cyber）介入次數約少 60%**。也就是說，做資安相關工作被無謂打斷的情況會明顯改善，Boris 表示後續還會再改進。（[來源](https://www.threads.com/@boris_cherny/post/DcwXyUQGlEz)）
+- **寫作與語氣更好**：Fable 5.1 的文字表達與語氣有所提升，團隊正在針對社群回饋積極減少「Claude 腔（Claude-speak）」，5.1 已有明顯進展。（[來源](https://www.threads.com/@boris_cherny/post/DcwXy4Pmm47)）
+
+### Function Hooks（早期預覽，2026 年 9 月）
+
+- Boris 公開徵求社群意見：團隊正在設計一套讓 **Claude Code 擴展性大幅提升**的機制，暫時命名為 **function hooks**（他形容「有點瘋狂，但非常令人興奮」），也在徵集更好的名稱（他自己提出的替代方案是 *self-modifying hooks*）。細節與討論在 [claude-code issue #91870](https://github.com/anthropics/claude-code/issues/91870)。**注意：這是尚未推出的早期預覽，設計仍可能改變。**（[來源](https://www.threads.com/@boris_cherny/post/Dc1j54Rmhw4)）
+
 ### 跨裝置與遠端控制（2026 年 3 月分享）
 
 - **行動裝置 App**：Claude Code 有 iOS / Android 應用程式，可直接在手機上審查 PR、撰寫程式碼，不需要開電腦。
@@ -151,6 +162,7 @@
 - **`/remote-control`**（或 `claude remote-control`）：從手機或網頁控制本地執行中的 session。Boris 在設定中對所有 session 預設啟用 remote-control。
 - **Cowork Dispatch**：Claude Desktop App 的安全遠端控制，可透過 MCP 和瀏覽器處理郵件、管理檔案等非編碼任務，Boris 每天用它遠端處理 Slack 和電子郵件。
 - **Cowork + Opus 4.7 自動完成現實世界任務**（2026 年 5 月分享）：將個人偏好（如航班艙等、飯店需求）寫進 Cowork instructions，讓 Opus 4.7 自動開啟瀏覽器、瀏覽多個網站並完成預訂。Boris 分享：過去 Cowork 訂機票表現平平，但搭配 Opus 4.7 後首次成功一次性完成——在他繼續用 Claude Code 工作的同時，Cowork 幫他訂了 8 趟班機和 5 間飯店。（[來源](https://www.threads.com/@boris_cherny/post/DYOBHmqmiR5/i-needed-to-book-flights-for-a-bunch-of-upcoming-travel-as-always-i-used-claude)）
+- **背景 computer use 被低估了（2026 年 9 月）**：Boris 一句話推薦——把 computer use 丟到背景執行，讓它在你繼續做別的事情時自己跑完，是目前被嚴重低估的用法。（[來源](https://www.threads.com/@boris_cherny/post/Dc1kMDWGqQh)）
 
 ### Artifacts（互動式產物）
 
