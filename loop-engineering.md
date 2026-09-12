@@ -2,13 +2,14 @@
 title: Loop Engineering
 tags: [agent, claude-code, loop, harness, ai-engineering]
 created: 2026-06-14
-last_reviewed: 2026-06-14
+last_reviewed: 2026-09-12
 type: reference
 status: living-document
 sources:
   - Addy Osmani, "Loop Engineering" (2026-06-09) — https://x.com/addyosmani/status/2064127981161959567
   - Peter Steinberger (@steipete) — "design loops that prompt your agents"
   - Boris Cherny (@bcherny) — "my job is to write loops"
+  - Andrew Ng (@AndrewYNg) — "AI Engineering Skills Map: Using coding agents"（2026-09-04）— https://x.com/AndrewYNg/status/2095890279865721217（§四 成本效益角度的反方，意見非數據）
   - 本 repo：boris-cherny-tips.md（Claude Code loop primitive 實例）
   - 本 repo：harness-engineering.md（內層：單一 agent 的運行環境）
   - 本 repo：graph-engineering.md（run 內的 cycle，對照本篇的跨 run loop）
@@ -138,6 +139,10 @@ Loop 改變了工作，沒有把你從工作裡刪掉。而且有三個問題隨
 
 一個 loop 兩個人用會得到相反結果：一個用它在自己**深刻理解**的工作上跑更快，另一個用它**避免理解**這份工作。loop 不知道差別，你知道。這正是為什麼 loop 設計比 prompt engineering 更難，不是更簡單——槓桿點移動了，難度沒有消失。
 
+**第三方的成本效益版本（2026-09 補，意見非數據）**：Andrew Ng 在 AI Engineering Skills Map 的〈Using coding agents〉一篇收尾時，直接點名社群把長程自主 run 講得太簡單——讓 agent 自己跑好幾小時、燒數百萬到數千萬 token「有時有用」，但「目前極長程任務的實用價值，尤其相對其成本，被放大到超出現實」；他認為有效的用法是高度迭代、由人以高技能判斷介入。上面三點講的是**品質**面的代價（驗證、理解、判斷力），他補的是**成本**面：即使品質守住，token 帳單也未必划算。兩邊指向同一個結論——loop 的價值在「人介入的那一下」，不在「跑多久」。
+
+> ⚠️ 舉證等級：他的依據是「訪談數十位頂尖 AI 工程師＋自家團隊經驗」，全篇沒有數字，也沒定義「長程」是幾小時或幾百萬 token 起算。當它是一個有影響力的從業者立場，不是實證。要驗證得自己量：同一任務，長程一次跑完 vs 切段人介入，比 token 與返工次數。
+
 ---
 
 ## 五、Claude Code ↔ Codex：loop primitive 對照
@@ -165,6 +170,7 @@ Addy 的論點之一是兩邊的零件形狀已經一樣。對照如下（互通
 - **Addy Osmani**, _"Loop Engineering"_（2026-06-09）— [https://x.com/addyosmani/status/2064127981161959567](https://x.com/addyosmani/status/2064127981161959567)
 - **Peter Steinberger**（@steipete）— "design loops that prompt your agents"（loop 概念定調）
 - **Boris Cherny**（@bcherny）— "My job is to write loops"（Anthropic Claude Code 負責人）
+- **Andrew Ng**（@AndrewYNg）— _"AI Engineering Skills Map: Using coding agents"_（2026-09-04）— [https://x.com/AndrewYNg/status/2095890279865721217](https://x.com/AndrewYNg/status/2095890279865721217)（只取收尾對長程自主 run 的成本效益判斷；同系列已讀的另兩篇——Building and Deploying Applications（2026-08-22）、Shaping the build（2026-09-12）——評估後不收，皆為技能清單，無機制無數據；總覽與 Software engineering fundamentals 兩篇尚未評估）
 
 ### 本 repo 內部連結
 
@@ -180,3 +186,4 @@ Addy 的論點之一是兩邊的零件形狀已經一樣。對照如下（互通
   - 沿用 harness 筆記 §四「每元件獨佔一個問題」的紀律切分 loop 三塊
 - **2026-08-02**：§本 repo 內部連結與 frontmatter sources 新增 [graph-engineering.md](./graph-engineering.md)，標出分界——該篇的 cycle 在**單一 run 內**（狀態在腳本變數，收斂靠 `while` 條件），本篇的 loop 是**跨 run**（狀態在磁碟，靠心跳叫醒、`/goal` 判停）
 - **2026-08-04**：§本 repo 內部連結新增 [eval-engineering.md](./eval-engineering.md)。接點有二：§2.3 判停問「何時算完成」，該篇 §一 問「判它的那個判官準不準」；§四 說「無人看管地跑的 loop 也是無人看管地犯錯的 loop」但沒給機制，該篇 §六 補上——shadow mode（閘門評分但不合併）＋ 追蹤閘門與人類 reviewer 的分歧率。本篇內容未動
+- **2026-09-12**：§四 新增一段 Andrew Ng〈Using coding agents〉對長程自主 run 的成本效益判斷，標為意見非數據。收的理由：§四 原有三點都是品質面代價，缺成本面；且這是有影響力的第三方明確反主流立場。同系列已讀的另兩篇評估後不收（見 §六）
