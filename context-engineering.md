@@ -121,6 +121,8 @@ Claude Code 自己的兩個做法：
 對自己的 CLAUDE.md / SKILL.md，對應的動作是**別把它當百科全書**。「怕 Claude 找不到所以先全部寫進去」是這篇點名的迷思——原文的建議是考慮改成**一棵可以按需載入的檔案樹**。
 
 > 這一格跟 [harness-engineering.md 面向 1](./harness-engineering.md#面向-1context-脈絡) 的「分層記憶」「動態提示詞組裝」是同一件事，那邊已經寫得比原文細（含 tool-call offloading、compaction vs reset）。本篇不重複，只補 deferred tool loading 這個新 primitive。
+>
+> 「全部前載」的價格在 [cost-engineering.md §4.3](./cost-engineering.md#43-mcp-schema-稅與三條路)：Uber 量到 100+ 個 MCP 工具的 schema 約 50–70K token，每一輪重送；那篇並補上 CLI 解析這條第三路。
 
 ### 2.4 重複強調 → 簡單的工具描述
 
@@ -280,6 +282,7 @@ Anthropic 出了 `/doctor` 幫忙瘦身——原文兩個名字都提了（CLI �
 - [prompt.md](./prompt.md) — 單次請求的措辭技巧
 - [graph-engineering.md](./graph-engineering.md) — workflow 編排層把 context offloading 開到極致（本篇 §2.3 漸進揭露的另一端；offloading 本身在 harness 面向 1）
 - [eval-engineering.md](./eval-engineering.md) — 本篇 §前言 說「你自己刪 context 之前該有自己的 eval」，那篇就是那組 eval 該長什麼樣（判官怎麼選、評什麼、案例哪來）
+- [cost-engineering.md](./cost-engineering.md) — 本篇講該給模型看什麼，那篇講給了之後每一輪付多少：§2.3 deferred tool loading 的價格（§4.3）、§三 分層配置的成本讀法（§五 grounding）
 
 ### 校對紀錄
 
@@ -289,5 +292,7 @@ Anthropic 出了 `/doctor` 幫忙瘦身——原文兩個名字都提了（CLI �
 - **2026-08-02（同日補記）**：§本 repo 內部連結新增 [graph-engineering.md](./graph-engineering.md)，標出分界——該篇談 workflow 編排層把 context offloading 開到極致（subagent 各自扛 context、主 context 只收結論），是本篇 §2.3 漸進揭露的另一端；**offloading 本身仍在 harness 面向 1**，本篇維持不重複的立場（§2.3 末的那則宣告不變）。
 
 - **2026-08-04**：§本 repo 內部連結新增 [eval-engineering.md](./eval-engineering.md)。本篇 §前言 的反方第一條說「你自己刪 context 之前該有自己的 eval」——那篇就是那組 eval 該長什麼樣（判官怎麼選、評什麼、案例哪來、什麼時候可以憑它放手）。本篇內容未動
+
+- **2026-09-12**：§2.3 補一則指路、§本 repo 內部連結新增 [cost-engineering.md](./cost-engineering.md)。該篇給本篇「全部前載 → 漸進揭露」那格一個價格（Uber：100+ MCP 工具 ≈ 50–70K token／輪），並把本篇 §三 的分層配置讀成個人版 grounding。本篇內容未動
 
 下次 review 觸發點：下一代模型發布（本篇的差分會再翻一次）、`/doctor` 行為變動、Anthropic 公布更細的 context engineering 指南、§2.2 few-shot 射程有人做出實測、harness 面向 1／5.1 的 CLAUDE.md 描述更新（§五 最後一列的未解衝突）。

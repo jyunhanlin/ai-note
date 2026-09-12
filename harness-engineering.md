@@ -15,6 +15,7 @@ sources:
   - Anthropic — Claude Code《Dynamic workflows》文件（多 agent 確定性編排 primitive）
   - 本 repo：graph-engineering.md（面向 4 的拓樸深潛；v2.1.220 Workflow 工具契約校準）
   - 本 repo：eval-engineering.md（面向 5 的深潛：判官家族偏誤、版本漂移、blast radius 放行閘門）
+  - 本 repo：cost-engineering.md（§七 Token 成本的深潛：六項成本方程式、逐項槓桿與 Uber 實測數字）
   - Birgitta Böckeler — "Harness engineering for coding agent users"（feedforward/feedback controls 切法）
   - 社群實戰報告 — agent teams / dynamic workflows 使用心得（Heeki Park、Michael Habib、Rally 等，2026-03～06）
   - Thariq（Anthropic）— "The new rules of context engineering for Claude 5 models"（2026-07-25）— §七 第一方實證；完整整理另見 context-engineering.md
@@ -656,6 +657,8 @@ Harness 的上下文注入機制會增加 Token 消耗，但 Harness Engineering
 - **工具精簡原則**：移除非核心工具，減少執行步驟，實現「少工具、少 Token、高成功率」
 - **Tool-call offloading**（見面向 1）：大型工具輸出寫檔案，context 只留指針
 
+> 這三條各自打在成本的哪一項、每一項還有哪些槓桿與數字，另立 [cost-engineering.md](./cost-engineering.md)：以 Uber 的六項成本方程式為骨架，KV-cache → 那篇 §4.2、工具精簡 → §4.3／4.5、offloading → §4.4。
+
 ### 適用邊界
 
 > 以下適用邊界較偏向**組織導入**情境（企業/團隊規模）。個人開發者通常不需要前期完整評估，直接從 Claude Code 開始用、隨需要加 hook 即可。
@@ -855,5 +858,9 @@ Addy Osmani 的版本更直接：**「If you're not the model, you're the harnes
   - 指路內容：本面向到「怎麼知道做對了」為止並假設驗證器已存在；「那個驗證器本身可不可信」（判官家族偏誤、版本漂移）與「什麼時候可以憑它放手」（blast radius 車道）由該篇接手
   - 該篇 §1.4 替本筆記 §三 心法 4（軟硬約束光譜）補了一個驗證層的應用實例：能用程式客觀檢查的就別交給判官——判官偏誤是要花錢買獨立性才能緩解的問題，能用 `exit 0` 判的事根本不需要進到那個問題裡
   - 該篇 §六 明記自己已走出 harness 邊界（放行是組織決策，不是 harness 元件），本筆記五面向的射程不變
+
+- **2026-09-12**：新增 [cost-engineering.md](./cost-engineering.md)，定位為 §七「Token 成本」的深潛。**本檔內容未移除、未改寫，只在 §七 Token 成本三條 bullet 後補一則指路**
+  - 該篇以 Uber（2026-08-29）的六項成本方程式為骨架，把 §七 三條手段各自放進一個項，並補上數字：MCP schema 100+ 工具 ≈ 50–70K token／輪、code-mode 小查詢省 55–71%、cache TTL 的 1.25×／2× 取捨
+  - 該篇 §二 四層場景是 §六「互動式 vs 自主 pipeline」那條軸的成本讀法；§4.1 是面向 1 compaction 光譜的成本讀法；§六 dashboard 是 5.5 observability 的自動化版
 
 下次 review 觸發點：Claude Code 主版本變動、出現新的有名 harness pattern、模型世代跨越（例如下一代 reasoning model 大規模可用）、招募端出現方法論可查的大樣本調查（可取代目前互相衝突的 62% vs 34%）。

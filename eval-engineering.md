@@ -587,6 +587,7 @@ harness [§五 5.5「評分標準設計」](./harness-engineering.md#55-verifica
 - [graph-engineering.md](./graph-engineering.md) — run 內的 verifier、quorum 陷阱、schema 驗證機制
 - [loop-engineering.md](./loop-engineering.md) — 判停：`done` 是宣稱不是證明
 - [context-engineering.md](./context-engineering.md) — 「刪 context 之前該有自己的 eval」指向本篇
+- [cost-engineering.md](./cost-engineering.md) — §四 收割出的題目在那篇 §3.1 多一個用途：畫 Pareto 前緣選模型；§1.4 判官要強、要跨家族與那篇 §3.2「subagent 執行者用弱模型」方向相反但不衝突
 
 ### 校對紀錄
 
@@ -631,5 +632,7 @@ harness [§五 5.5「評分標準設計」](./harness-engineering.md#55-verifica
   - 保鮮期改為繼承 ihower §八 的「角色不過期／題目會過期」分界，§4.4 給出兩個失去鑑別度的觀察訊號
   - **可讀性校準**：粗體密度從 12.4 降到 8.8（同法量得 graph 4.2、context 5.9）。**量法**：全檔含 frontmatter，數 `**…**` 的出現次數 ÷ 總字元數 × 1000；換個口徑（例如排除 frontmatter 與 §八）絕對值會變，**排序不變**。重點本來也不是絕對值，是消除「每節都一樣濃」的平坦感——原本各節都落在 13.8–17.9，等於沒有重點；現在留下的粗體集中在主張本身與表格的判定欄。同時統一術語（`家族偏誤` 為概念名、`偏袒`／`低估` 只描述方向；`子代理`→`subagent`），並在 §前言 增設**用字約定**區塊，說明 `判官`（本篇，計量準確度）與 repo 其他篇 `裁判`（結構獨立性）是同一角色的兩條軸
   - 另修：Goodhart 定律過去三處只出現名字沒有內容，§5.2 補上一句定義；`S2 setup`、`溫度計 vs 恆溫器` 補上解釋；§二 誤植「三處」實為四處
+
+- **2026-09-12**：§本 repo 內部連結新增 [cost-engineering.md](./cost-engineering.md)。該篇把本篇 §四 的收割題目拿去選模型（同一份題目兩用），並釐清「執行者用弱模型」與本篇 §1.4「判官要強」是兩個角色、兩個方向。本篇內容未動
 
 下次 review 觸發點：UXBench／UDA 更新或勘誤、GRM 路線出現可用的開源實作、三層級分類法出現指名論文、原文作者更正、harness §四 面向 5 或 §五 5.5 重寫、**本篇收割出的題目開始通過率貼頂（§4.4）**。
