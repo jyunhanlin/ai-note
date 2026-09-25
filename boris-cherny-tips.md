@@ -58,6 +58,10 @@
 - 廣泛委派任務，例如：「去修復失敗的 CI 測試」，而不是微管理每個步驟。
 - 給 Claude 一個**驗證迴圈**，讓它自行檢查輸出結果，可帶來 2-3 倍的品質提升。
 
+### 用 Projects 寫程式碼（2026 年 9 月分享）
+
+- Boris 表示 **Projects 是他現在撰寫大部分程式碼的方式**，並宣布全新的 Projects 體驗正在推出（rolling out）。值得把它當成 session 之外的另一層工作單位來嘗試。（[來源](https://www.threads.com/@boris_cherny/post/DdZaZPbmuK0)）
+
 ### 提示技巧
 
 - 要求 Claude 解釋其修改的理由，挑戰它的決策。
@@ -158,6 +162,14 @@
 - **誤攔（false positive）大幅減少**：最新的生物領域防護在良性請求上的介入次數比 Fable 5 少 **85%**；**Claude Code 使用者每個 session 的資安（cyber）介入次數約少 60%**。也就是說，做資安相關工作被無謂打斷的情況會明顯改善，Boris 表示後續還會再改進。（[來源](https://www.threads.com/@boris_cherny/post/DcwXyUQGlEz)）
 - **寫作與語氣更好**：Fable 5.1 的文字表達與語氣有所提升，團隊正在針對社群回饋積極減少「Claude 腔（Claude-speak）」，5.1 已有明顯進展。（[來源](https://www.threads.com/@boris_cherny/post/DcwXy4Pmm47)）
 
+> ⏳ **時效註記（2026-09-25 補）**：上面「Fable 5.1 是目前最好的模型」是該貼文當時的說法。就**長時間 agentic 編碼**而言，Boris 後續貼出的 HAProxy 對照數字已把這個排序更新為 Opus 5.5——見下方 §Opus 5.5。
+
+### Opus 5.5（2026 年 9 月分享）
+
+- **Opus 5.5 是 Boris 現在的 daily driver**：他直言「Opus 5.5 是個真的很好的模型」，過去幾週都用它當主力。（[來源](https://www.threads.com/@boris_cherny/post/DdmMhjYGkBQ)）
+- **HAProxy C→Rust 移植對照**：團隊讓 Opus 5.5 與 Fable 5.1 各自把 HAProxy 從 C 移植到 Rust。兩者都幾乎通過 HAProxy 的全部測試，但 **Opus 5.5 花 9.5 小時，Fable 5.1 花 12 小時，且 Opus 5.5 的成本少 51%**。
+- 實務含意：**長時間、大規模的移植／agentic 任務優先選 Opus 5.5**——它在這類任務上同時比 Fable 5.1 更快也更便宜，不是速度換成本的取捨。（[來源](https://www.threads.com/@boris_cherny/post/DdmMhjYGkBQ)）
+
 ### Function Hooks（早期預覽，2026 年 9 月）
 
 - Boris 公開徵求社群意見：團隊正在設計一套讓 **Claude Code 擴展性大幅提升**的機制，暫時命名為 **function hooks**（他形容「有點瘋狂，但非常令人興奮」），也在徵集更好的名稱（他自己提出的替代方案是 *self-modifying hooks*）。細節與討論在 [claude-code issue #91870](https://github.com/anthropics/claude-code/issues/91870)。**注意：這是尚未推出的早期預覽，設計仍可能改變。**（[來源](https://www.threads.com/@boris_cherny/post/Dc1j54Rmhw4)）
@@ -231,6 +243,14 @@
 
 - 啟用解釋輸出模式，讓 Claude 說明它讀到的程式碼。
 - 要求以 HTML 視覺化呈現，或使用 ASCII 圖表理解不熟悉的架構。
+
+### 形式化驗證找 bug（2026 年 9 月分享）
+
+- **用 Claude 做形式化驗證（formal verification）來挖出人類找不到的 bug**：Boris 用 **Opus 5.5 搭配 Lean** 對 **Claude Agent SDK** 做形式化驗證，「幾個簡短的 prompt」就產出 **16 個 PR**，修掉多個 bug 與 race condition。（[來源](https://www.threads.com/@boris_cherny/post/Ddm76imE8DU)）
+- **TLA+ 也同樣好用**，Boris 有時會把 **Lean 與 TLA+ 併用**，專門找 **資料流（data flow）、並行（concurrency）與狀態管理（state mgmt）** 相關的問題。
+- **關鍵是你不必懂這些語言**：Boris 自己表示兩種語言都不熟，但「Claude 兩種都很強」——所以門檻在於願不願意讓 Claude 去建模，而不在於你的形式化方法背景。
+- 適用情境：把程式碼形式化建模，找出**人類大概不會發現**的 bug。
+- 延伸：Boris 另發了一篇「形式化驗證是不是 coding（或至少是找 bug）的未來？」並附上請 Opus 產生的資訊圖表。（[來源](https://www.threads.com/@boris_cherny/post/Ddm7_EbD-TD)）
 
 ### 研究與非編碼任務
 
