@@ -68,6 +68,16 @@
 - 當結果平庸時，要求重新撰寫，而不是接受低品質輸出。
 - 要求 Claude 扮演審閱者角色，審查自己或他人的程式碼。
 
+#### 提示沒有秘訣：像對同事一樣說話（2026 年 10 月分享）
+
+- **像跟同事溝通一樣跟 Claude 說話**——Boris 表示「提示沒有秘訣」。（[來源](https://www.threads.com/@boris_cherny/post/DeKrEiyGgTd)）
+- **不要過度鋪陳（scaffold），大多數任務也不要寫得太死**：給 Claude 一個目標，它會自己想出做法。（[來源](https://www.threads.com/@boris_cherny/post/DeKrEiyGgTd)）
+- 在 Sonnet 3.5 時代，prompt 的寫法影響很大；如今更重要的是向模型清楚傳達三件事：（[來源](https://www.threads.com/@boris_cherny/post/DeKrEiyGgTd)）
+  1. **你要它做什麼**
+  2. **你希望它投入多少心力（effort）**
+  3. **它該如何驗證自己做對了**
+- Boris 在同一串的回覆中附上了他實際使用的完整 prompt 截圖，可作為參考範例。（[來源](https://www.threads.com/@boris_cherny/post/DeKq9N2GoEC)）
+
 ---
 
 ## 客製化與自動化
