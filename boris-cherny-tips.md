@@ -184,6 +184,13 @@
 
 - Boris 公開徵求社群意見：團隊正在設計一套讓 **Claude Code 擴展性大幅提升**的機制，暫時命名為 **function hooks**（他形容「有點瘋狂，但非常令人興奮」），也在徵集更好的名稱（他自己提出的替代方案是 *self-modifying hooks*）。細節與討論在 [claude-code issue #91870](https://github.com/anthropics/claude-code/issues/91870)。**注意：這是尚未推出的早期預覽，設計仍可能改變。**（[來源](https://www.threads.com/@boris_cherny/post/Dc1j54Rmhw4)）
 
+### Claude Code Review 正式推出（GA，2026 年 10 月分享）
+
+- **讓 Claude Code Review 跑在每一個 PR 上**：Code Review 已對 Claude Team 與 Enterprise 方案正式推出（GA）。Boris 表示他所有的 PR 都會跑 Code Review，「無法想像少了它還能有生產力」。（[來源](https://www.threads.com/@boris_cherny/post/DekKNE2GdSS)）
+- **依 repo 選擇審查層級**：管理員可針對每個 repo 選擇 **Quick、Standard 或 Deep** 三種審查層級——依 repo 的重要性與風險決定審查深度。（[來源](https://www.threads.com/@boris_cherny/post/DekKNE2GdSS)）
+- **GA 版的改進**：審查速度比研究預覽版快約 **3 倍**，找到的問題（findings）也更精簡，並且更能抓到真正重要的 bug。（[來源](https://www.threads.com/@boris_cherny/post/DekKN5kmdEE)）
+- **開發者零設定**：管理員在 **Claude Code 設定**中開啟 Code Review 並選擇要套用的 repo，之後每個新開的 PR 都會自動被審查，開發者不需要做任何設定。（[來源](https://www.threads.com/@boris_cherny/post/DekKPCvGbnM)）
+
 ### 跨裝置與遠端控制（2026 年 3 月分享）
 
 - **行動裝置 App**：Claude Code 有 iOS / Android 應用程式，可直接在手機上審查 PR、撰寫程式碼，不需要開電腦。
